@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author kenchiro
+ * @author Christian
  */
 public class Producto {
     private int idProducto = -1;

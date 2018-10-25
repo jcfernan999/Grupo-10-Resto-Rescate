@@ -8,10 +8,7 @@ package Modelo;
 import java.awt.Component;
 import java.awt.Container;
 
-/**
- *
- * @author Juan
- */
+
 public class SwingUtils {
     public static void setEnableContainer(Container c, boolean band) {
          

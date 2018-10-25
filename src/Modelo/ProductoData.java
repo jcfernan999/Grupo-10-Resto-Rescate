@@ -7,10 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author kenchiro
- */
+
 public class ProductoData {
      private Connection connection = null;
      private Conexion conexion;

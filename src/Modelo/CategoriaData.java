@@ -12,10 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author kenchiro
- */
+
 public class CategoriaData {
     private Connection connection = null;
 private Conexion conexion;

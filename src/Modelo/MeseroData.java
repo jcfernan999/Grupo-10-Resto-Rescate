@@ -13,10 +13,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Juan
- */
 public class MeseroData {
   private Connection connection = null;
 
