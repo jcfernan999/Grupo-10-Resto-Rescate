@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Modelo;
 
 import javax.swing.Icon;
 import javax.swing.table.AbstractTableModel;
 
-/**
- *
- * @author Juan
- */
+
 public class TheModel extends AbstractTableModel {
      private String[] columns;
     private Object[][] rows;
