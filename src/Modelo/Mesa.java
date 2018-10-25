@@ -1,36 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Modelo;
 
-/**
- *
- * @author quitian
- */
 public class Mesa {
-   private int idMesa = -1;
-   private int capacidad;
-   private int estado;
-   private boolean activo;
-
-    public Mesa(int idMesa, int capacidad, int estado, boolean activo) {
+    private int idMesa = -1;
+    private String nombre;
+    private int capacidad;
+    private int estado;
+    private boolean activo;
+    
+    public Mesa(int idMesa, String nombre,int capacidad, int estado, boolean activo) {
         this.idMesa = idMesa;
+        this.nombre = nombre;
         this.capacidad = capacidad;
         this.estado = estado;
         this.activo = activo;
     }
-
-    public Mesa(int capacidad, int estado, boolean activo) {
+    public Mesa(String nombre,int capacidad, int estado) {
         this.idMesa = -1;
+        this.nombre = nombre;
         this.capacidad = capacidad;
         this.estado = estado;
-        this.activo = activo;
+        
     }
-
     public Mesa() {
         this.idMesa = -1;
+        
     }
 
     public int getIdMesa() {
@@ -41,6 +35,14 @@ public class Mesa {
         this.idMesa = idMesa;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
     public int getCapacidad() {
         return capacidad;
     }
@@ -64,10 +66,5 @@ public class Mesa {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-   
-   
-   
-   
-         
-           
+    
 }

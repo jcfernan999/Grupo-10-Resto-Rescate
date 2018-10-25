@@ -1,14 +1,12 @@
 
 package Modelo;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 /**
  *
  * @author kenchiro
@@ -29,7 +27,7 @@ public class ProductoData {
     public void guardarProducto(Producto producto){
         try {
             
-            String sql = "INSERT INTO producto ( idcategoria,nombre, cantidad, precio,imagen,activo) VALUES ( ? , ? , ?, ? ,?);";
+            String sql = "INSERT INTO producto ( idcategoria,nombre, cantidad, precio,imagen,activo) VALUES ( ? , ? , ?, ? ,?,?);";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
@@ -38,7 +36,8 @@ public class ProductoData {
             statement.setInt(3, producto.getCantidad());
             statement.setDouble(4, producto.getPrecio());
             statement.setBytes(5, producto.getImagen());
-            statement.setBoolean(3, producto.getActivo());
+            statement.setBoolean(6, producto.getActivo());
+            
             statement.executeUpdate();
             
             ResultSet rs = statement.getGeneratedKeys();
@@ -86,41 +85,7 @@ public class ProductoData {
         return productos;
       
     }
-//    //////////////////////BindTale()
-//    public List<Producto> listaProducto2(){
-//        List<Producto> productos = new ArrayList<Producto>();
-//            
-//
-//        try {
-//            String sql = "Select * From producto;"; 
-//                    
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            
-//            ResultSet resultSet = statement.executeQuery();
-//            Producto producto;
-//            while(resultSet.next()){
-//                producto = new Producto();
-//                producto.setIdProducto(resultSet.getInt("idProducto"));
-//                producto.setNombre(resultSet.getString("nombre"));
-//                producto.setPrecio(resultSet.getDouble("precio"));
-//                producto.setImagen(resultSet.getBytes("imagen"));
-//                
-//                Categoria c=buscarCategoria(resultSet.getInt("idCategoria"));
-//                producto.setCategoria(c);
-//                
-//                productos.add(producto);
-//            }      
-//            statement.close();
-//        } catch (SQLException ex) {
-//            System.out.println("Error al obtener los Categorias: " + ex.getMessage());
-//        }
-//        
-//        
-//        return productos;
-//      
-//    }
-    
-    //Buscamos la categoria en categoriaData
+
     public Categoria buscarCategoria(int id){
     
         CategoriaData ad=new CategoriaData(conexion);
@@ -129,14 +94,28 @@ public class ProductoData {
         
     }
     //con este llenamos table 
-    public List<Producto> obtenerProductoCategoria(int  id){
+    public List<Producto> obtenerProductoCategoria(String tipo,String  dato){
         List<Producto> productos = new ArrayList<Producto>();
-            
-
+        String sql;    
+        PreparedStatement statement;
         try {
-            String sql = "SELECT * FROM producto WHERE idCategoria = ?;";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,id);
+             if("Nombre".equals(tipo))
+            {
+                sql = "SELECT * FROM producto WHERE nombre = ?;";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+            }
+            else if("Categoria".equals(tipo))
+            {
+                sql = "SELECT * FROM producto p, categoria c WHERE p.IdCategoria = c.IdCategoria and  c.Nombre = ?;";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+            }
+            else{
+                sql = "SELECT * FROM cliente WHERE activo = 0;";
+                 statement = connection.prepareStatement(sql);
+            }
+            
          
             ResultSet resultSet = statement.executeQuery();
             Producto producto;
@@ -144,6 +123,7 @@ public class ProductoData {
                producto = new Producto();
                producto.setIdProducto(resultSet.getInt("idProducto"));
                producto.setNombre(resultSet.getString("nombre"));
+               producto.setCantidad(resultSet.getInt("cantidad"));
                producto.setPrecio(resultSet.getDouble("precio"));
                producto.setImagen(resultSet.getBytes("imagen"));
                producto.setActivo(resultSet.getBoolean("activo"));
@@ -221,6 +201,7 @@ public class ProductoData {
     }
      
      
+     
       //-------------------------------Borrar
     public void borrarProducto(int id){
     try {
@@ -240,4 +221,39 @@ public class ProductoData {
         
     
     }
+    
+    public List<Producto> listaProductoPorCategoria(int idCategoria){
+        List<Producto> productos = new ArrayList<Producto>();
+            
+
+        try {
+            String sql = "Select * From producto where idCategoria = ?;"; 
+                    
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, idCategoria);
+            ResultSet resultSet = statement.executeQuery();
+            Producto producto;
+            while(resultSet.next()){
+                producto = new Producto();
+                producto.setIdProducto(resultSet.getInt("idProducto"));
+                producto.setNombre(resultSet.getString("nombre"));
+                producto.setCantidad(resultSet.getInt("cantidad"));
+                producto.setPrecio(resultSet.getDouble("precio"));
+                producto.setImagen(resultSet.getBytes("imagen"));
+                producto.setActivo(resultSet.getBoolean("activo"));
+                Categoria c=buscarCategoria(resultSet.getInt("idCategoria"));
+                producto.setCategoria(c);
+                
+                productos.add(producto);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener los Categorias: " + ex.getMessage());
+        }
+        
+        
+        return productos;
+      
+    }
+    
 }

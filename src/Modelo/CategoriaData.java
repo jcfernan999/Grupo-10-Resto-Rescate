@@ -5,9 +5,7 @@
  */
 package Modelo;
 
-import Modelo.Categoria;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public class CategoriaData {
     private Connection connection = null;
-
+private Conexion conexion;
     public CategoriaData(Conexion conexion) 
     {
         try {
@@ -133,6 +131,32 @@ public class CategoriaData {
             statement.close();
         } catch (SQLException ex) {
             System.out.println("errorororror: " + ex.getMessage());
+        }
+        
+        return categoria;
+    }
+    
+    public Categoria buscarCategoria(String Nombre){
+        Categoria categoria=null;
+    try {
+            
+            String sql = "SELECT * FROM categoria WHERE nombre =?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, Nombre);
+           
+            
+            ResultSet resultSet=statement.executeQuery();
+            
+            while(resultSet.next()){
+                categoria = new Categoria();
+                categoria.setIdCategoria(resultSet.getInt("idCategoria"));
+                categoria.setNombre(resultSet.getString("nombre"));
+                categoria.setDescripcion(resultSet.getString("descripcion"));
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al Buscar una Categoria: " + ex.getMessage());
         }
         
         return categoria;

@@ -16,7 +16,7 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
     public VistaCategoria() {
         initComponents();
         try {
-            conexion = new Conexion("jdbc:mysql://localhost/restaurante", "root", "");
+            conexion = new Conexion("jdbc:mysql://localhost/resto", "root", "");
             categoriaData = new CategoriaData(conexion);
         
         } 
