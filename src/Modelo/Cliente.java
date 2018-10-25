@@ -1,36 +1,37 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Modelo;
 
-/**
- *
- * @author aulasitc
- */
+
 public class Cliente {
     private int idCliente = -1;
     private String nombre;
+    private String apellido;
     private int dni;
     private boolean activo;
+    
 
-    public Cliente(int idCliente, String nombre, int dni, boolean activo) {
+    public Cliente(int idCliente, String nombre, String apellido, int dni, boolean activo) 
+    {
         this.idCliente = idCliente;
         this.nombre = nombre;
+        this.apellido = apellido;
         this.dni = dni;
         this.activo = activo;
+        
     }
 
-    public Cliente(String nombre, int dni, boolean activo) {
+    public Cliente(String nombre, String apellido, int dni) 
+    {
         this.idCliente = -1;
         this.nombre = nombre;
+        this.apellido=apellido;
         this.dni = dni;
-        this.activo = activo;
+        
     }
-
-    public Cliente() {
+     public Cliente() 
+    {
         this.idCliente = -1;
+        
     }
 
     public int getIdCliente() {
@@ -49,6 +50,14 @@ public class Cliente {
         this.nombre = nombre;
     }
 
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public int getDni() {
         return dni;
     }
@@ -64,10 +73,6 @@ public class Cliente {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-
-    
-    
-    }
-    
     
    
+}
