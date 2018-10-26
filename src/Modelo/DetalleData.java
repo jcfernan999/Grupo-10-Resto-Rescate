@@ -48,7 +48,24 @@ public class DetalleData {
             System.out.println("Error al insertar un Detalle: " + ex.getMessage());
         }
     }
+    public void actualizarDetalle(Detalle detalle){
+        
+        try {
+            
+            String sql = "UPDATE detalle SET activo = ? WHERE idDetalle = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setBoolean(1, detalle.getActivo());
+            statement.setInt(2, detalle.getIdDetalle());
+            statement.executeUpdate();
+            
+            statement.close();
     
+        } catch (SQLException ex) {
+            System.out.println("Error al Modidicar un Detalle: " + ex.getMessage());
+        }
+    
+    }
     public List<Detalle> obtenerDetalle(int  idPedido,int idMesa){
         List<Detalle> detalles = new ArrayList<Detalle>();
             
@@ -101,7 +118,7 @@ public class DetalleData {
         try {
             String sql = "SELECT * "
                        + "FROM detalle "
-                       + "WHERE idPedido = ? ;";//si 1, no 0
+                       + "WHERE idPedido = ? and activo = 1;";//si 1, no 0
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,idPedido);
 //            statement.setInt(2,idPedido);
@@ -114,6 +131,8 @@ public class DetalleData {
                
                detalle.setCantidad(resultSet.getInt("cantidad"));
                detalle.setTotal(resultSet.getDouble("total"));
+               detalle.setActivo(resultSet.getBoolean("activo"));
+               detalle.setIdDetalle(resultSet.getInt("idDetalle"));
                
                Producto pro = buscarProducto(resultSet.getInt("idProducto"));
                detalle.setProducto(pro);
@@ -133,6 +152,38 @@ public class DetalleData {
         
         
         return detalles;
+    }
+    
+     public Detalle buscarDetalle(int id){
+        Detalle detalle=null;
+    try {
+        String sql = "SELECT * FROM detalle WHERE idDetalle = ?;";
+
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        statement.setInt(1, id);   
+            
+        ResultSet resultSet=statement.executeQuery();
+            
+        while(resultSet.next()){
+            detalle = new Detalle();
+            detalle.setIdDetalle(resultSet.getInt("idDetalle"));
+            detalle.setCantidad(resultSet.getInt("cantidad"));
+            detalle.setTotal(resultSet.getDouble("total"));
+            detalle.setActivo(resultSet.getBoolean("activo"));
+            
+            Pedido pe = buscarPedido(resultSet.getInt("idPedido"));
+                detalle.setPedido(pe);
+                
+            Producto pro = buscarProducto(resultSet.getInt("idProducto"));
+            detalle.setProducto(pro);
+        }      
+        statement.close();
+    } 
+    catch (SQLException ex){
+        System.out.println("errorororror: " + ex.getMessage());
+    }
+        
+        return detalle;
     }
     
     public Mesa buscarMesa(int id){

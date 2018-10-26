@@ -7,13 +7,15 @@ public class Detalle {
     private Pedido pedido;
     private int cantidad;
     private double total;
+    private boolean activo;
 
-    public Detalle(int idDetalle, Producto producto, Pedido pedido, int cantidad, double total) {
+    public Detalle(int idDetalle, Producto producto, Pedido pedido, int cantidad, double total,boolean activo) {
         this.idDetalle = idDetalle;
         this.producto = producto;
         this.pedido = pedido;
         this.cantidad = cantidad;
         this.total = total;
+        this.activo = activo;
     }
 
     public Detalle(Producto producto, Pedido pedido, int cantidad, double total) {
@@ -65,6 +67,14 @@ public class Detalle {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
     
 }

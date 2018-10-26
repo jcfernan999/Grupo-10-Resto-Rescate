@@ -21,25 +21,24 @@ public class PedidoData {
     }
     
     public void guardarPedido(Pedido pedido){
-        System.out.println("0");
+        
         try {
-            System.out.println("1");
+            
             String sql = "INSERT INTO pedido (idMesero,idMesa, fecha, hora,cancelado,pagado) VALUES ( ?, ?, ?, ?, ?, ?);";
-System.out.println("2");
+
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
-            statement.setInt(1, pedido.getMesa().getIdMesa());
-            System.out.println(pedido.getMesa().getIdMesa());
-            statement.setInt(2, pedido.getMesero().getIdMesero());
-            System.out.println(pedido.getMesero().getIdMesero());
+            
+            statement.setInt(1, pedido.getMesero().getIdMesero());
+            statement.setInt(2, pedido.getMesa().getIdMesa());
             statement.setDate(3, pedido.getFecha());
-            System.out.println(pedido.getFecha());
+            
             statement.setString(4, pedido.getHora());
-            System.out.println(pedido.getHora());
+           
             statement.setBoolean(5, pedido.getCancelado());
-            System.out.println(pedido.getCancelado());
+            
             statement.setBoolean(6, pedido.getPagado());
-            System.out.println(pedido.getPagado());
+            
             statement.executeUpdate();
             
             ResultSet rs = statement.getGeneratedKeys();
@@ -52,7 +51,7 @@ System.out.println("2");
             statement.close();
     
         } catch (SQLException ex) {
-            System.out.println("Error al insertar un Producto: " + ex.getMessage());
+            System.out.println("Error al insertar un Pedido: " + ex.getMessage());
         }
     }
     
@@ -61,6 +60,42 @@ System.out.println("2");
     try {
             
             String sql = "SELECT * FROM pedido WHERE idPedido =?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, id);
+           
+            ResultSet resultSet=statement.executeQuery();
+            
+            while(resultSet.next()){
+                pedido = new Pedido();
+                pedido.setIdPedido(resultSet.getInt("idPedido"));
+                
+                pedido.setFecha(resultSet.getDate("fecha"));
+                pedido.setHora(resultSet.getString("hora"));
+                pedido.setCancelado(resultSet.getBoolean("cancelado"));
+                pedido.setPagado(resultSet.getBoolean("pagado"));
+                
+                Mesero msr=buscarMesero(resultSet.getInt("idMesero"));
+                pedido.setMesero(msr);
+                
+                Mesa ms=buscarMesa(resultSet.getInt("idMesa"));
+                pedido.setMesa(ms);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("errorororror: " + ex.getMessage());
+        }
+        
+        return pedido;
+    }
+    
+    public Pedido buscarPedidoMesa(int id){
+        
+        Pedido pedido=null;
+    try {
+                        
+
+            String sql = "SELECT * FROM pedido WHERE idMesa =?;";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
@@ -104,5 +139,30 @@ System.out.println("2");
         
         return md.buscarMesa(id);
         
+    }
+     
+     //-------------------------------ACTUALIZAR
+    public void actualizarPedido(Pedido pedido){
+    
+        try {
+            
+            String sql = "UPDATE pedido SET idMesero = ?, idMesa = ?, fecha = ? , hora = ?, pagado = ?, cancelado = ?  WHERE idPedido = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, pedido.getMesero().getIdMesero());
+            statement.setInt(2, pedido.getMesa().getIdMesa());
+            statement.setDate(3, pedido.getFecha());
+            statement.setString(4, pedido.getHora());
+            statement.setBoolean(5, pedido.getPagado());
+            statement.setBoolean(6, pedido.getCancelado());
+            statement.setInt(7, pedido.getIdPedido());
+            statement.executeUpdate();
+            
+            statement.close();
+    
+        } catch (SQLException ex) {
+            System.out.println("Error al Modidicar una Pedido: " + ex.getMessage());
+        }
+    
     }
 }
