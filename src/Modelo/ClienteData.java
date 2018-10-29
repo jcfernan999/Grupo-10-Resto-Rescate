@@ -100,8 +100,20 @@ public class ClienteData {
                  statement = connection.prepareStatement(sql);
                 statement.setInt(1,Integer.parseInt(dato));
             }
+            else if("Activos".equals(tipo))
+            {
+                sql = "SELECT * FROM cliente WHERE activo = 1 ;";
+                 statement = connection.prepareStatement(sql);
+              
+            }
+            else if("Desactivado".equals(tipo))
+            {
+                sql = "SELECT * FROM cliente WHERE activo = 0 ;";
+                 statement = connection.prepareStatement(sql);
+                
+            }
             else{
-                sql = "SELECT * FROM cliente WHERE activo = 0;";
+                sql = "SELECT * FROM cliente WHERE activo = 1;";
                  statement = connection.prepareStatement(sql);
             }
             
@@ -195,7 +207,31 @@ public class ClienteData {
         } catch (SQLException ex) {
             System.out.println("Error al insertar un alumno: " + ex.getMessage());
         }
-        
-    
-    }  
+    }
+    public Cliente buscarClientePorDni(int dni){
+        Cliente cliente=null;
+        try {
+            String sql = "SELECT * FROM cliente WHERE dni = ? and activo = 1;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, dni);   
+
+            ResultSet resultSet=statement.executeQuery();
+
+            while(resultSet.next()){
+                cliente = new Cliente();
+                cliente.setIdCliente(resultSet.getInt("idCliente"));
+                cliente.setNombre(resultSet.getString("nombre"));
+                cliente.setApellido(resultSet.getString("apellido"));
+                cliente.setDni(resultSet.getInt("dni"));
+                cliente.setActivo(resultSet.getBoolean("activo"));
+
+            }      
+            statement.close();
+        } 
+        catch (SQLException ex){
+            System.out.println("Error al Buscar un Cliente: " + ex.getMessage());
+        }
+        return cliente;
+    }
 }

@@ -198,7 +198,49 @@ private Conexion conexion;
         } catch (SQLException ex) {
             System.out.println("Error al insertar un alumno: " + ex.getMessage());
         }
-        
+    }
     
+    public List<Categoria> obtenerCategoria(String tipo,String dato){
+        List<Categoria> categorias = new ArrayList<Categoria>();
+        String sql;    
+        PreparedStatement statement;
+        try {
+            if("Nombre".equals(tipo))
+            {
+                sql = "SELECT * FROM categoria WHERE nombre = ? AND activo = 1 ;";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+            }
+            else if("Activos".equals(tipo))
+            {
+                sql = "SELECT * FROM categoria WHERE activo = 1 ;";
+                statement = connection.prepareStatement(sql);
+                
+            }
+            else if("Desactivado".equals(tipo))
+            {
+                sql = "SELECT * FROM categoria WHERE activo = 0 ;";
+                statement = connection.prepareStatement(sql);    
+            }
+            else
+            {
+                sql = "SELECT * FROM categoria WHERE activo = 1 ;";
+                statement = connection.prepareStatement(sql);
+            }
+            ResultSet resultSet = statement.executeQuery();
+            Categoria categoria;
+            while(resultSet.next()){
+                categoria = new Categoria();
+                categoria.setIdCategoria(resultSet.getInt("idCategoria"));
+                categoria.setNombre(resultSet.getString("nombre"));
+                categoria.setDescripcion(resultSet.getString("descripcion"));
+                
+                categorias.add(categoria);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener las categoria: " + ex.getMessage());
+        }
+        return categorias;
     }
 }

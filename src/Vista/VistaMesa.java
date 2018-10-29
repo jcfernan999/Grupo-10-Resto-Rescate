@@ -1,23 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vista;
 
 import Modelo.Conexion;
 import Modelo.Mesa;
 import Modelo.MesaData;
+import Modelo.SoloMayusculas;
 import Modelo.TheModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Juan
- */
+
 public class VistaMesa extends javax.swing.JInternalFrame {
     private MesaData mesaData;
     
@@ -29,8 +26,11 @@ public class VistaMesa extends javax.swing.JInternalFrame {
         try {
             conexion = new Conexion("jdbc:mysql://localhost/resto", "root", "");
             mesaData = new MesaData(conexion);
-//            listaMesas=(ArrayList)mesaData.obtenerMesas();
+
             tbId.setVisible(false);
+            cargarTablaMesa("","");
+            tbBuscar.setDocument(new SoloMayusculas());
+            tbNombre.setDocument(new SoloMayusculas());
         } 
         catch (ClassNotFoundException ex) {
             Logger.getLogger(VistaCategoria.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,9 +66,9 @@ public class VistaMesa extends javax.swing.JInternalFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mesa");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Mesa.png"))); // NOI18N
 
-        jPanel3.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel3.setBackground(new java.awt.Color(153, 153, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Buscar"));
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar46.png"))); // NOI18N
@@ -82,7 +82,12 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             }
         });
 
-        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Capacidad", "Desactivado" }));
+        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Capacidad", "Activos", "Desactivado" }));
+        cbBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -90,7 +95,7 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cbBuscar, 0, 113, Short.MAX_VALUE)
+                .addComponent(cbBuscar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(tbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -121,13 +126,7 @@ public class VistaMesa extends javax.swing.JInternalFrame {
         aaaaaaaa.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         aaaaaaaa.setText("Nombre");
 
-        tbNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tbNombreKeyTyped(evt);
-            }
-        });
-
-        sCapacidad.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
+        sCapacidad.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 2));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -158,7 +157,7 @@ public class VistaMesa extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(sCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 255));
@@ -256,8 +255,8 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,15 +272,13 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 432, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,28 +287,45 @@ public class VistaMesa extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        cargarTablaMesa();
-       
+        
+        String seleccionado = (String)cbBuscar.getSelectedItem();
+        if(tbBuscar.getText().isEmpty()&& "Desactivado".equals(seleccionado))    
+        {
+            LimpiarTabla();
+            cargarTablaMesa(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()&& "Activos".equals(seleccionado))    
+        {
+            LimpiarTabla();
+            cargarTablaMesa(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()) 
+        {
+
+            JOptionPane.showMessageDialog(null, "Ingrese Datos ");
+        }
+        else{
+            LimpiarTabla();
+            cargarTablaMesa(seleccionado,tbBuscar.getText());
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-         if (tbNombre.getText().isEmpty()){
-
-              JOptionPane.showMessageDialog(null, "Imgrese un Nombre", "Error", JOptionPane.WARNING_MESSAGE);
+        if (tbNombre.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Imgrese un Nombre", "Error", JOptionPane.WARNING_MESSAGE);
         }
         else{
             String nombre = tbNombre.getText();
@@ -320,16 +334,20 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             Mesa  mesa = new Mesa(nombre,capacidad,estado);
             mesaData.guardarMesa(mesa);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaMesa("","");
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (tbId.getText().isEmpty()){
-
-              JOptionPane.showMessageDialog(null, "Seleccione una Fila", "Error", JOptionPane.WARNING_MESSAGE);
-
+        if (tbId.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese una fila: ");
+            tbNombre.requestFocus();
         }
-        else{
+        
+        else
+        {
             int id = Integer.parseInt(tbId.getText());
             String nombre = tbNombre.getText();
             int capacidad = Integer.parseInt(sCapacidad.getValue().toString());
@@ -338,22 +356,25 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             Mesa mesa =new Mesa(id,nombre,capacidad,estado,activo);
             mesaData.actualizarMesa(mesa);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaMesa("","");
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         
         
-        if (tbId.getText().isEmpty()){
-
-            JOptionPane.showMessageDialog(null, "Seleccione una Fila", "Error", JOptionPane.WARNING_MESSAGE);
-
+        if (tbId.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese una fila: ");
         }
         else{
             int id = Integer.parseInt(tbId.getText());
             
             mesaData.borrarMesa(id);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaMesa("","");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -364,13 +385,6 @@ public class VistaMesa extends javax.swing.JInternalFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void tbNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbNombreKeyTyped
-        String texto=tbNombre.getText().toUpperCase(); 
-        
-        tbNombre.setText(texto); 
-        
-    }//GEN-LAST:event_tbNombreKeyTyped
 
     private void tMesaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tMesaMousePressed
         int filaSeleccionada = this.tMesa.getSelectedRow();//Identificamos que fila ha sido seleccionada
@@ -384,11 +398,22 @@ public class VistaMesa extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: " + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_tMesaMousePressed
+
+    private void cbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBuscarActionPerformed
+        if(cbBuscar.getSelectedItem()=="Activos" || cbBuscar.getSelectedItem()=="Desactivado")
+        {
+            tbBuscar.setEnabled(false);
+        }
+        else
+        {
+            tbBuscar.setEnabled(true);
+        }
+    }//GEN-LAST:event_cbBuscarActionPerformed
      //Creamos la tabbla y llenamos
-    public void cargarTablaMesa(){
-        String seleccionado = (String)cbBuscar.getSelectedItem();
+    public void cargarTablaMesa(String seleccionado,String buscar){
+       
         
-        listaMesas =(ArrayList)mesaData.obtenerMesa(seleccionado,tbBuscar.getText());
+        listaMesas =(ArrayList)mesaData.obtenerMesa(seleccionado,buscar);
         
         String[] columnName = {"Id","Nombre","Capacidad","Estado"};
         Object[][] rows = new Object[listaMesas.size()][4];
@@ -420,6 +445,45 @@ public class VistaMesa extends javax.swing.JInternalFrame {
     {
         tbNombre.setText("");
         sCapacidad.setValue(0);
+    }
+    public static void soloLetras(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
+    }
+    
+     public static void soloNumeros(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(!Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
+    }
+    DefaultTableModel temp;
+    void LimpiarTabla(){
+        
+        try{
+            temp = (DefaultTableModel) tMesa.getModel();
+            int a =temp.getRowCount()-1;
+            for(int i=0; i<a; i++)
+                temp.removeRow(0); 
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aaaaaaaa;

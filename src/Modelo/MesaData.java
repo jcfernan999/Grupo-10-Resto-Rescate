@@ -78,19 +78,36 @@ public class MesaData {
         try {
             if("Nombre".equals(tipo))
             {
-                sql = "SELECT * FROM mesa WHERE nombre = ? AND activo = 1 ;";
+                sql = "SELECT * FROM mesa WHERE nombre = ? AND activo = 1 AND estado = 1;";
+                 statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+            }
+            else if("Estado".equals(tipo))
+            {
+                sql = "SELECT * FROM mesa WHERE estado = ? AND activo = 1 AND estado = 1;";
                  statement = connection.prepareStatement(sql);
                 statement.setString(1,dato);
             }
             else if("Capacidad".equals(tipo))
             {
-                sql = "SELECT * FROM mesa WHERE capacidad = ? AND activo = 1 ;";
+                sql = "SELECT * FROM mesa WHERE capacidad = ? AND activo = 1 AND estado = 1;";
                  statement = connection.prepareStatement(sql);
                 statement.setInt(1,Integer.parseInt(dato));
             }
-            else{
-                sql = "SELECT * FROM mesa WHERE activo = 0;";
+             else if("Activos".equals(tipo))
+            {
+                sql = "SELECT * FROM mesa WHERE activo = 1 AND estado = 1;";
+                statement = connection.prepareStatement(sql);
+            }
+              else if("Desactivado".equals(tipo))
+            {
+                sql = "SELECT * FROM mesa WHERE activo = 0 AND estado = 1;";
                  statement = connection.prepareStatement(sql);
+                
+            }
+            else{
+                sql = "SELECT * FROM mesa WHERE activo = 1 AND estado = 1;";
+                statement = connection.prepareStatement(sql);
             }
             
          

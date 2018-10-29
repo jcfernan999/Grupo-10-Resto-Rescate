@@ -8,11 +8,16 @@ package Vista;
 import Modelo.Cliente;
 import Modelo.ClienteData;
 import Modelo.Conexion;
+import Modelo.SoloMayusculas;
 import Modelo.TheModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 
 public class VistaCliente extends javax.swing.JInternalFrame {
@@ -26,6 +31,15 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             conexion = new Conexion("jdbc:mysql://localhost/resto", "root", "");
             clienteData = new ClienteData(conexion);
             tbId.setVisible(false);
+            cargarTablaCliente("","");
+            
+            tbNombre.setDocument(new SoloMayusculas());
+            tbBuscar.setDocument(new SoloMayusculas());
+            tbApellido.setDocument(new SoloMayusculas());
+            
+            soloLetras(tbNombre);
+            soloLetras(tbApellido);
+            soloNumeros(tbDni);
         } 
         catch (ClassNotFoundException ex) {
             Logger.getLogger(VistaCategoria.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,19 +74,19 @@ public class VistaCliente extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tCliente = new javax.swing.JTable();
 
-        setMaximumSize(new java.awt.Dimension(908, 433));
-        setMinimumSize(new java.awt.Dimension(908, 433));
-        setPreferredSize(new java.awt.Dimension(908, 433));
+        setMaximumSize(new java.awt.Dimension(906, 435));
+        setMinimumSize(new java.awt.Dimension(906, 435));
+        setPreferredSize(new java.awt.Dimension(906, 435));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Cliente");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Cliente.png"))); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Datos"));
-        jPanel1.setMaximumSize(new java.awt.Dimension(343, 219));
-        jPanel1.setMinimumSize(new java.awt.Dimension(343, 219));
-        jPanel1.setPreferredSize(new java.awt.Dimension(343, 219));
+        jPanel1.setMaximumSize(new java.awt.Dimension(331, 232));
+        jPanel1.setMinimumSize(new java.awt.Dimension(331, 232));
+        jPanel1.setPreferredSize(new java.awt.Dimension(331, 232));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Apellido");
@@ -123,11 +137,13 @@ public class VistaCliente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tbDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Menu"));
+        jPanel6.setMaximumSize(new java.awt.Dimension(432, 114));
+        jPanel6.setMinimumSize(new java.awt.Dimension(432, 114));
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ProductoAgregar.png"))); // NOI18N
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -194,7 +210,7 @@ public class VistaCliente extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel4.setBackground(new java.awt.Color(153, 153, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Buscar"));
 
         btnBuscar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar46.png"))); // NOI18N
@@ -208,7 +224,12 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Nombre", "Apellido", "Desactivado" }));
+        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Nombre", "Apellido", "Activos", "Desactivado" }));
+        cbBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -263,8 +284,8 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,61 +299,80 @@ public class VistaCliente extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        if (tbDni.getText()==""){
+        if ("".equals(tbNombre.getText())){
             
-            JOptionPane.showMessageDialog(null, "Ingrese el DNI", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese el Nombre");
+
+        }
+        else if ("".equals(tbApellido.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el Apellido");
+
+        }
+        else if ("".equals(tbDni.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el DNI");
 
         }
         else{
             String nombre = tbNombre.getText();
             String apellido = tbApellido.getText();
             int dni = Integer.parseInt(tbDni.getText());
-    //        boolean activo=true;
+    
             Cliente  cliente = new Cliente(nombre,apellido,dni);
 
             clienteData.guardarCliente(cliente);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaCliente("","");
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (tbDni.getText()==""){
+        if ("".equals(tbNombre.getText())){
             
-            JOptionPane.showMessageDialog(null, "Ingrese el DNI", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese el Nombre");
+
+        }
+        else if ("".equals(tbApellido.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el Apellido");
+
+        }
+        else if ("".equals(tbDni.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el DNI");
 
         }
         else{
@@ -343,19 +383,29 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             
             int id = Integer.parseInt(tbId.getText());
             
-             
-            
             Cliente cliente=new Cliente(id,nombre,apellido,dni,activo);
             clienteData.actualizarCliente(cliente);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaCliente("", "");
         }
 
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if (tbId.getText()==""){
+       if ("".equals(tbNombre.getText())){
             
-            JOptionPane.showMessageDialog(null, "Seleccione una Fila", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese el Nombre");
+
+        }
+        else if ("".equals(tbApellido.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el Apellido");
+
+        }
+        else if ("".equals(tbDni.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Ingrese el DNI");
 
         }
         else{
@@ -365,6 +415,8 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             cliente.setActivo(false);
             clienteData.actualizarCliente(cliente);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaCliente("", "");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -377,7 +429,30 @@ public class VistaCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        cargarTablaCliente();
+        String seleccionado = (String)cbBuscar.getSelectedItem();
+       
+
+        if(tbBuscar.getText().isEmpty()&& "Desactivado".equals(seleccionado))    
+        {
+
+            LimpiarTabla();
+            cargarTablaCliente(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()&& "Activos".equals(seleccionado))    
+        {
+
+            LimpiarTabla();
+            cargarTablaCliente(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()) 
+        {
+
+            JOptionPane.showMessageDialog(null, "Ingrese Datos ");
+        }
+        else{
+            LimpiarTabla();
+            cargarTablaCliente(seleccionado,tbBuscar.getText());
+        }
 
     }//GEN-LAST:event_btnBuscar1ActionPerformed
 
@@ -394,11 +469,23 @@ public class VistaCliente extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: " + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_tClienteMousePressed
+
+    private void cbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBuscarActionPerformed
+        Limpiar();
+        if(cbBuscar.getSelectedItem()=="Activos" || cbBuscar.getSelectedItem()=="Desactivado")
+        {
+            tbBuscar.setEnabled(false);
+        }
+        else
+        {
+            tbBuscar.setEnabled(true);
+        }
+    }//GEN-LAST:event_cbBuscarActionPerformed
      //Creamos la tabbla y llenamos
-    public void cargarTablaCliente(){
-        String seleccionado = (String)cbBuscar.getSelectedItem();
+    public void cargarTablaCliente(String seleccionado,String buscar){
         
-        listaClientes =(ArrayList)clienteData.obtenerCliente(seleccionado,tbBuscar.getText());
+        
+        listaClientes =(ArrayList)clienteData.obtenerCliente(seleccionado,buscar);
         
         String[] columnName = {"Id","Nombre","Apellido","DNI"};
         Object[][] rows = new Object[listaClientes.size()][4];
@@ -415,12 +502,51 @@ public class VistaCliente extends javax.swing.JInternalFrame {
         tCliente.setRowHeight(50);
         tCliente.getColumnModel().getColumn(1).setPreferredWidth(100);
     }
- public void Limpiar()
+    public void Limpiar()
     {
         tbNombre.setText("");
         tbApellido.setText("");
         tbDni.setText("");
         tbBuscar.setText("");
+    }
+    DefaultTableModel temp;
+    void LimpiarTabla(){
+        try{
+            temp = (DefaultTableModel) tCliente.getModel();
+            int a =temp.getRowCount()-1;
+            for(int i=0; i<a; i++)
+                temp.removeRow(0); 
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    
+    public void soloLetras(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
+    }
+    
+     public void soloNumeros(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(!Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aaaaaaaa;

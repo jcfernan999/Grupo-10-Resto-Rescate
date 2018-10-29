@@ -1,27 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vista;
 
 import Modelo.Mesero;
 import Modelo.MeseroData;
 import Modelo.Conexion;
+import Modelo.SoloMayusculas;
 import Modelo.TheModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Juan
- */
 public class VistaMesero extends javax.swing.JInternalFrame {
  private MeseroData meseroData;
     private ArrayList<Mesero> listaMeseros;
     private Conexion conexion;
+    
+
     
     public VistaMesero() {
         initComponents();
@@ -29,6 +28,12 @@ public class VistaMesero extends javax.swing.JInternalFrame {
             conexion = new Conexion("jdbc:mysql://localhost/resto", "root", "");
             meseroData = new MeseroData(conexion);
             tbId.setVisible(false);
+            tbNombre.setDocument(new SoloMayusculas());
+            tbBuscar.setDocument(new SoloMayusculas());
+            soloLetras(tbNombre);
+            soloNumeros(tbDni);
+            tbNombre.requestFocus();
+            cargarTablaMesero("","");
         } 
         catch (ClassNotFoundException ex) {
             Logger.getLogger(VistaCategoria.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,12 +64,21 @@ public class VistaMesero extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tMesero = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(0, 0, 0));
+        setMaximumSize(new java.awt.Dimension(906, 435));
+        setMinimumSize(new java.awt.Dimension(906, 435));
+        setOpaque(true);
+
+        jLabel1.setBackground(new java.awt.Color(0, 153, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Mesero");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Mesero.png"))); // NOI18N
+        jLabel1.setOpaque(true);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Datos"));
+        jPanel1.setMaximumSize(new java.awt.Dimension(331, 232));
+        jPanel1.setMinimumSize(new java.awt.Dimension(331, 232));
 
         aaaaaaaa.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         aaaaaaaa.setText("Nombre");
@@ -101,11 +115,13 @@ public class VistaMesero extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3))
                 .addGap(25, 25, 25)
                 .addComponent(tbId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Menu"));
+        jPanel6.setMaximumSize(new java.awt.Dimension(432, 114));
+        jPanel6.setMinimumSize(new java.awt.Dimension(432, 114));
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/ProductoAgregar.png"))); // NOI18N
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -172,7 +188,7 @@ public class VistaMesero extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel4.setBackground(new java.awt.Color(153, 153, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Buscar"));
 
         btnBuscar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar46.png"))); // NOI18N
@@ -186,7 +202,12 @@ public class VistaMesero extends javax.swing.JInternalFrame {
             }
         });
 
-        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Nombre", "Apellido", "Desactivado" }));
+        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Nombre", "Activos", "Desactivado" }));
+        cbBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -241,14 +262,14 @@ public class VistaMesero extends javax.swing.JInternalFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -256,17 +277,15 @@ public class VistaMesero extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,29 +300,44 @@ public class VistaMesero extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-
-        String nombre = tbNombre.getText();
-       
-        int dni = Integer.parseInt(tbDni.getText());
-        boolean activo=true;
-        Mesero  mesero = new Mesero(nombre,dni,activo);
-
-        meseroData.guardarMesero(mesero);
-//        Limpiar();
+        if (tbNombre.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese Un Nombre: ");
+            tbNombre.requestFocus();
+        }
+        else if (tbDni.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese Un DNI: ");
+            tbDni.requestFocus();
+        }
+        else
+        {
+            String nombre = tbNombre.getText();
+            int dni = parseInt(tbDni.getText());
+            boolean activo=true;
+            Mesero  mesero = new Mesero(nombre,dni,activo);
+            meseroData.guardarMesero(mesero);
+            LimpiarTabla();
+            cargarTablaMesero("","");
+            Limpiar();
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         if (tbNombre.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: ", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese Nombre Apellido");
+        }
+        else  if (tbDni.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese DNI");
         }
         else{
             String nombre = tbNombre.getText();
@@ -315,22 +349,30 @@ public class VistaMesero extends javax.swing.JInternalFrame {
             Mesero mesero=new Mesero(id,nombre,dni,activo);
             meseroData.actualizarMesero(mesero);
             Limpiar();
+            LimpiarTabla();
+            cargarTablaMesero("", "");
 
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         int id=Integer.parseInt(tbId.getText());
-         if (tbNombre.getText().isEmpty())
+        if (tbNombre.getText().isEmpty())
         {
-            JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: ", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ingrese un Nombre: ");
+        }
+        else  if (tbDni.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Ingrese un DNI: ");
         }
         else{
             Mesero mesero = meseroData.buscarMesero(id);
-             mesero.setActivo(false);
-             meseroData.actualizarMesero(mesero);
+            mesero.setActivo(false);
+            meseroData.actualizarMesero(mesero);
+            Limpiar();
+            LimpiarTabla();
+            cargarTablaMesero("", "");
          }
-//        clienteData.borrarCliente(id);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -342,7 +384,29 @@ public class VistaMesero extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        cargarTablaMesero();
+        String seleccionado = (String)cbBuscar.getSelectedItem();
+
+        if(tbBuscar.getText().isEmpty()&& "Desactivado".equals(seleccionado))    
+        {
+
+            LimpiarTabla();
+            cargarTablaMesero(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()&& "Activos".equals(seleccionado))    
+        {
+
+            LimpiarTabla();
+            cargarTablaMesero(seleccionado,tbBuscar.getText());    
+        }
+        else if(tbBuscar.getText().isEmpty()) 
+        {
+
+            JOptionPane.showMessageDialog(null, "Ingrese Datos ");
+        }
+        else{
+            LimpiarTabla();
+            cargarTablaMesero(seleccionado,tbBuscar.getText());
+        }
     }//GEN-LAST:event_btnBuscar1ActionPerformed
 
     private void tMeseroMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tMeseroMousePressed
@@ -358,26 +422,38 @@ public class VistaMesero extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: " + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_tMeseroMousePressed
+
+    private void cbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBuscarActionPerformed
+        if(cbBuscar.getSelectedItem()=="Activos" || cbBuscar.getSelectedItem()=="Desactivado")
+        {
+            tbBuscar.setEnabled(false);
+        }
+        else
+        {
+            tbBuscar.setEnabled(true);
+        }
+       
+        
+    }//GEN-LAST:event_cbBuscarActionPerformed
      //Creamos la tabbla y llenamos
-    public void cargarTablaMesero(){
-        String seleccionado = (String)cbBuscar.getSelectedItem();
+    public void cargarTablaMesero(String seleccionado,String buscar){
+        listaMeseros =(ArrayList)meseroData.obtenerMesero(seleccionado,buscar);
         
-        listaMeseros =(ArrayList)meseroData.obtenerMesero(seleccionado,tbBuscar.getText());
-        
-        String[] columnName = {"Id","Nombre","DNI","Activo"};
-        Object[][] rows = new Object[listaMeseros.size()][4];
+        String[] columnName = {"Id","Nombre","DNI"};
+        Object[][] rows = new Object[listaMeseros.size()][3];
         for(int i = 0; i < listaMeseros.size(); i++)
         {
             rows[i][0] = listaMeseros.get(i).getIdMesero();
             rows[i][1] = listaMeseros.get(i).getNombre();
             rows[i][2] = listaMeseros.get(i).getDni();
-            rows[i][3] = listaMeseros.get(i).getActivo();
+//            rows[i][3] = listaMeseros.get(i).getActivo();
         }
         
         TheModel model = new TheModel(rows, columnName);
         tMesero.setModel(model);
         tMesero.setRowHeight(50);
-        tMesero.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tMesero.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tMesero.getColumnModel().getColumn(1).setPreferredWidth(150);
     }
     public void Limpiar()
     {
@@ -386,7 +462,44 @@ public class VistaMesero extends javax.swing.JInternalFrame {
         tbDni.setText("");
         tbBuscar.setText("");
     }
-
+    public void soloLetras(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
+    }
+    
+     public void soloNumeros(JTextField a)
+    {
+        a.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e)
+            {
+                char c=e.getKeyChar();
+                if(!Character.isDigit(c))
+                {
+                    e.consume();
+                }
+            }
+        });
+    }
+    DefaultTableModel temp;
+    void LimpiarTabla(){
+        try{
+            temp = (DefaultTableModel) tMesero.getModel();
+            int a =temp.getRowCount()-1;
+            for(int i=0; i<a; i++)
+                temp.removeRow(0); 
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel aaaaaaaa;
     private javax.swing.JButton btnAgregar;
@@ -409,4 +522,5 @@ public class VistaMesero extends javax.swing.JInternalFrame {
     private javax.swing.JTextField tbId;
     private javax.swing.JTextField tbNombre;
     // End of variables declaration//GEN-END:variables
+  
 }

@@ -164,7 +164,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         tbNueva = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
 
-        pnlProducto.setBackground(new java.awt.Color(51, 255, 102));
+        pnlProducto.setBackground(new java.awt.Color(153, 153, 255));
         pnlProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Lista Producto"));
 
         pnlBotonesCategoria.setLayout(new java.awt.GridLayout(1, 0));
@@ -192,7 +192,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                     .addGap(0, 216, Short.MAX_VALUE)))
         );
 
-        pnlDetalle.setBackground(new java.awt.Color(255, 255, 102));
+        pnlDetalle.setBackground(new java.awt.Color(153, 153, 255));
         pnlDetalle.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Detalle"));
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Agregar_A_48.png"))); // NOI18N
@@ -272,7 +272,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel2.setBackground(new java.awt.Color(153, 153, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Mesas"));
 
         pnlMesas.setLayout(new java.awt.GridLayout(0, 2, 1, 0));
@@ -313,7 +313,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane4))
         );
 
-        jPanel9.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel9.setBackground(new java.awt.Color(153, 153, 255));
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Mesero"));
 
         tMesero.setModel(new javax.swing.table.DefaultTableModel(
@@ -345,7 +345,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel7.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel7.setBackground(new java.awt.Color(153, 153, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Fecha y Hora"));
 
         dcFecha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -388,7 +388,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel8.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel8.setBackground(new java.awt.Color(0, 153, 255));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Pedido"));
 
         btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -428,7 +428,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                     .addComponent(btnVerMesa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        pnlReserva.setBackground(new java.awt.Color(102, 255, 102));
+        pnlReserva.setBackground(new java.awt.Color(0, 153, 255));
         pnlReserva.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Reserva"));
 
         tbDni.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -479,7 +479,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
             .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        jPanel11.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel11.setBackground(new java.awt.Color(0, 153, 255));
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Menu"));
 
         cbPagado.setText("PAGADO");
@@ -530,7 +530,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel12.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel12.setBackground(new java.awt.Color(153, 153, 255));
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Producto"));
 
         tbStock.setEnabled(false);
@@ -570,7 +570,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addGap(0, 7, Short.MAX_VALUE))
         );
 
-        pnlCambio.setBackground(new java.awt.Color(102, 255, 102));
+        pnlCambio.setBackground(new java.awt.Color(0, 153, 255));
         pnlCambio.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Cambiar"));
 
         btnCambiar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Mesa/Cambiar_A.png"))); // NOI18N
@@ -636,7 +636,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                     .addComponent(btnCambiar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel1.setBackground(new java.awt.Color(102, 255, 102));
+        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

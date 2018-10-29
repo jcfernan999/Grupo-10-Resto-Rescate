@@ -30,6 +30,8 @@ public class Principal extends javax.swing.JFrame {
         btnProducto = new javax.swing.JButton();
         btnMesa = new javax.swing.JButton();
         btnPedido = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnReserva = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         Escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -49,6 +51,7 @@ public class Principal extends javax.swing.JFrame {
         setAutoRequestFocus(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, java.awt.Color.black, java.awt.Color.black));
 
         btnMesero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Mesero.png"))); // NOI18N
         btnMesero.setBorderPainted(false);
@@ -69,6 +72,7 @@ public class Principal extends javax.swing.JFrame {
         btnCliente.setContentAreaFilled(false);
         btnCliente.setFocusPainted(false);
         btnCliente.setFocusable(false);
+        btnCliente.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Cliente_B.png"))); // NOI18N
         btnCliente.setRequestFocusEnabled(false);
         btnCliente.setRolloverEnabled(false);
         btnCliente.setVerifyInputWhenFocusTarget(false);
@@ -83,6 +87,7 @@ public class Principal extends javax.swing.JFrame {
         btnProducto.setContentAreaFilled(false);
         btnProducto.setFocusPainted(false);
         btnProducto.setFocusable(false);
+        btnProducto.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Producto_B.png"))); // NOI18N
         btnProducto.setRequestFocusEnabled(false);
         btnProducto.setRolloverEnabled(false);
         btnProducto.setVerifyInputWhenFocusTarget(false);
@@ -97,6 +102,7 @@ public class Principal extends javax.swing.JFrame {
         btnMesa.setContentAreaFilled(false);
         btnMesa.setFocusPainted(false);
         btnMesa.setFocusable(false);
+        btnMesa.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Mesa_B.png"))); // NOI18N
         btnMesa.setRequestFocusEnabled(false);
         btnMesa.setRolloverEnabled(false);
         btnMesa.setVerifyInputWhenFocusTarget(false);
@@ -107,9 +113,47 @@ public class Principal extends javax.swing.JFrame {
         });
 
         btnPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Pedido.png"))); // NOI18N
+        btnPedido.setBorderPainted(false);
+        btnPedido.setContentAreaFilled(false);
+        btnPedido.setFocusPainted(false);
+        btnPedido.setFocusable(false);
+        btnPedido.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Pedido_B.png"))); // NOI18N
+        btnPedido.setRequestFocusEnabled(false);
+        btnPedido.setRolloverEnabled(false);
+        btnPedido.setVerifyInputWhenFocusTarget(false);
         btnPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidoActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Salir.png"))); // NOI18N
+        btnSalir.setBorderPainted(false);
+        btnSalir.setContentAreaFilled(false);
+        btnSalir.setFocusPainted(false);
+        btnSalir.setFocusable(false);
+        btnSalir.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Salir_B.png"))); // NOI18N
+        btnSalir.setRequestFocusEnabled(false);
+        btnSalir.setRolloverEnabled(false);
+        btnSalir.setVerifyInputWhenFocusTarget(false);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
+        btnReserva.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Reserva.png"))); // NOI18N
+        btnReserva.setBorderPainted(false);
+        btnReserva.setContentAreaFilled(false);
+        btnReserva.setFocusPainted(false);
+        btnReserva.setFocusable(false);
+        btnReserva.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/Reserva_B.png"))); // NOI18N
+        btnReserva.setRequestFocusEnabled(false);
+        btnReserva.setRolloverEnabled(false);
+        btnReserva.setVerifyInputWhenFocusTarget(false);
+        btnReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReservaActionPerformed(evt);
             }
         });
 
@@ -119,35 +163,41 @@ public class Principal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnMesero, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMesa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnMesero, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE)
+                    .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnPedido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE)
+                    .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(btnMesero, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(btnMesero, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 926, Short.MAX_VALUE)
+            .addGap(0, 922, Short.MAX_VALUE)
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,7 +302,7 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -264,47 +314,6 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void miMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMesasActionPerformed
-
-    }//GEN-LAST:event_miMesasActionPerformed
-
-    private void miProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductoActionPerformed
-        Escritorio.removeAll();
-        Escritorio.repaint();
-          VistaProducto vp=new VistaProducto();
-          vp.setVisible(true);
-        Escritorio.add(vp);
-        Escritorio.moveToFront(vp);
-    }//GEN-LAST:event_miProductoActionPerformed
-
-    private void miPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPedidoActionPerformed
-        Escritorio.removeAll();
-        Escritorio.repaint();
-          VistaPedido vp=new VistaPedido();
-          vp.setVisible(true);
-        Escritorio.add(vp);
-        Escritorio.moveToFront(vp);
-    }//GEN-LAST:event_miPedidoActionPerformed
-
-    private void miReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miReservaActionPerformed
-//        Escritorio.removeAll();
-//        Escritorio.repaint();
-//          VistaReserva vr=new VistaReserva();
-//          vr.setVisible(true);
-//        Escritorio.add(vr);
-//        Escritorio.moveToFront(vr);
-                
-              
-    }//GEN-LAST:event_miReservaActionPerformed
-
-    private void miListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miListaActionPerformed
-        
-    }//GEN-LAST:event_miListaActionPerformed
-
-    private void miEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEjemploActionPerformed
-        
-    }//GEN-LAST:event_miEjemploActionPerformed
 
     private void btnMeseroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMeseroActionPerformed
         Escritorio.removeAll();
@@ -351,8 +360,61 @@ public class Principal extends javax.swing.JFrame {
         Escritorio.moveToFront(vr);
     }//GEN-LAST:event_btnPedidoActionPerformed
 
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservaActionPerformed
+        Escritorio.removeAll();
+        Escritorio.repaint();
+          VistaReserva vr=new VistaReserva();
+          vr.setVisible(true);
+        Escritorio.add(vr);
+        Escritorio.moveToFront(vr);
+    }//GEN-LAST:event_btnReservaActionPerformed
+
+    private void miReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miReservaActionPerformed
+        //        Escritorio.removeAll();
+        //        Escritorio.repaint();
+        //          VistaReserva vr=new VistaReserva();
+        //          vr.setVisible(true);
+        //        Escritorio.add(vr);
+        //        Escritorio.moveToFront(vr);
+
+    }//GEN-LAST:event_miReservaActionPerformed
+
+    private void miPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPedidoActionPerformed
+        Escritorio.removeAll();
+        Escritorio.repaint();
+        VistaPedido vp=new VistaPedido();
+        vp.setVisible(true);
+        Escritorio.add(vp);
+        Escritorio.moveToFront(vp);
+    }//GEN-LAST:event_miPedidoActionPerformed
+
+    private void miProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductoActionPerformed
+        Escritorio.removeAll();
+        Escritorio.repaint();
+        VistaProducto vp=new VistaProducto();
+        vp.setVisible(true);
+        Escritorio.add(vp);
+        Escritorio.moveToFront(vp);
+    }//GEN-LAST:event_miProductoActionPerformed
+
+    private void miEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEjemploActionPerformed
+
+    }//GEN-LAST:event_miEjemploActionPerformed
+
+    private void miListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miListaActionPerformed
+
+    }//GEN-LAST:event_miListaActionPerformed
+
+    private void miMesasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMesasActionPerformed
+
+    }//GEN-LAST:event_miMesasActionPerformed
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
@@ -399,6 +461,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnMesero;
     private javax.swing.JButton btnPedido;
     private javax.swing.JButton btnProducto;
+    private javax.swing.JButton btnReserva;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

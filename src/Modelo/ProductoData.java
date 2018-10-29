@@ -98,18 +98,30 @@ public class ProductoData {
         try {
              if("Nombre".equals(tipo))
             {
-                sql = "SELECT * FROM producto WHERE nombre = ?;";
+                sql = "SELECT * FROM producto WHERE nombre = ? and activo=1;";
                 statement = connection.prepareStatement(sql);
                 statement.setString(1,dato);
             }
             else if("Categoria".equals(tipo))
             {
-                sql = "SELECT * FROM producto p, categoria c WHERE p.IdCategoria = c.IdCategoria and  c.Nombre = ?;";
+                sql = "SELECT * FROM producto p, categoria c WHERE p.IdCategoria = c.IdCategoria and  c.Nombre = ?  and p.activo=1;";
                 statement = connection.prepareStatement(sql);
                 statement.setString(1,dato);
             }
+             else if("Activos".equals(tipo))
+            {
+                sql = "SELECT * FROM producto WHERE activo=1;";
+                statement = connection.prepareStatement(sql);
+                
+            }
+              else if("Desactivado".equals(tipo))
+            {
+                sql = "SELECT * FROM producto WHERE activo = 0;";
+                statement = connection.prepareStatement(sql);
+                
+            }
             else{
-                sql = "SELECT * FROM cliente WHERE activo = 0;";
+                sql = "SELECT * FROM producto WHERE activo = 1;";
                  statement = connection.prepareStatement(sql);
             }
             
@@ -165,7 +177,7 @@ public class ProductoData {
         }
     
     }
-     public Producto buscarProducto(int id){
+    public Producto buscarProducto(int id){
         Producto producto=null;
     try {
             

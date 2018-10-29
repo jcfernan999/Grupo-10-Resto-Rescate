@@ -97,6 +97,16 @@ public class MeseroData {
                  statement = connection.prepareStatement(sql);
                 statement.setInt(1,Integer.parseInt(dato));
             }
+            else if("".equals(tipo))
+            {
+                sql = "SELECT * FROM mesero WHERE activo = 1;";
+                statement = connection.prepareStatement(sql);
+                
+            }else if("Activos".equals(tipo))
+            {
+                sql = "SELECT * FROM mesero WHERE activo = 1;";
+                statement = connection.prepareStatement(sql);    
+            }
             else{
                 sql = "SELECT * FROM mesero WHERE activo = 0;";
                  statement = connection.prepareStatement(sql);
