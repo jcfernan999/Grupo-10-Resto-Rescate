@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
 import java.sql.Connection;
@@ -15,7 +10,7 @@ import java.util.List;
 
 public class CategoriaData {
     private Connection connection = null;
-private Conexion conexion;
+
     public CategoriaData(Conexion conexion) 
     {
         try {
@@ -24,17 +19,17 @@ private Conexion conexion;
             System.out.println("Error al abrir al obtener la conexion");
         }
     }
-     //-------------------------------Guardar datos 
+    //-------------------------------Guardar datos 
     public void guardarCategoria(Categoria categoria)
     {
         try {
             
-            String sql = "INSERT INTO categoria (nombre, descripcion) VALUES ( ?, ? );";
+            String sql = "INSERT INTO categoria (nombre, descripcion, activo) VALUES ( ?, ?, ? );";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, categoria.getNombre());
             statement.setString(2, categoria.getDescripcion());
-//            statement.setBoolean(3, categoria.getActivo());
+            statement.setBoolean(3, categoria.getActivo());
             
             statement.executeUpdate();
             
@@ -52,7 +47,7 @@ private Conexion conexion;
         }
     }
     
-    //-------------------------------Litar datos 
+    //-------------------------------LISTA CATEGORIAS 
     public List<Categoria> obtenerCategorias(){
         List<Categoria> categorias = new ArrayList<Categoria>();
             
@@ -67,7 +62,7 @@ private Conexion conexion;
                 categoria.setIdCategoria(resultSet.getInt("idCategoria"));
                 categoria.setNombre(resultSet.getString("nombre"));
                 categoria.setDescripcion(resultSet.getString("descripcion"));
-                
+                categoria.setActivo(resultSet.getBoolean("activo"));
 
                 categorias.add(categoria);
             }      
@@ -93,7 +88,7 @@ private Conexion conexion;
                 categoria = new Categoria();
                 categoria.setIdCategoria(resultSet.getInt("idCategoria"));
                 categoria.setNombre(resultSet.getString("nombre"));
-                
+                categoria.setActivo(resultSet.getBoolean("activo"));
                 Categorias.add(categoria);
             }      
             statement.close();
@@ -124,15 +119,16 @@ private Conexion conexion;
                 categoria.setIdCategoria(resultSet.getInt("idCategoria"));
                 categoria.setNombre(resultSet.getString("nombre"));
                 categoria.setDescripcion(resultSet.getString("descripcion"));
+                categoria.setActivo(resultSet.getBoolean("activo"));
             }      
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("errorororror: " + ex.getMessage());
+            System.out.println("Error al Buscar una Categoria: "  + ex.getMessage());
         }
         
         return categoria;
     }
-    
+    //------------------BUSCAMOS CATEGORIA POR NOMBRE
     public Categoria buscarCategoria(String Nombre){
         Categoria categoria=null;
     try {
@@ -150,6 +146,7 @@ private Conexion conexion;
                 categoria.setIdCategoria(resultSet.getInt("idCategoria"));
                 categoria.setNombre(resultSet.getString("nombre"));
                 categoria.setDescripcion(resultSet.getString("descripcion"));
+                categoria.setActivo(resultSet.getBoolean("activo"));
             }      
             statement.close();
         } catch (SQLException ex) {
@@ -159,17 +156,18 @@ private Conexion conexion;
         return categoria;
     }
     
-     //-------------------------------ACTUALIZAR
+    //-------------------------------ACTUALIZAR
     public void actualizarCategoria(Categoria categoria){
     
         try {
             
-            String sql = "UPDATE categoria SET nombre = ?, descripcion = ? WHERE idCategoria = ?;";
+            String sql = "UPDATE categoria SET nombre = ?, descripcion = ?, activo = ? WHERE idCategoria = ?;";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, categoria.getNombre());
             statement.setString(2, categoria.getDescripcion());
-            statement.setInt(3, categoria.getIdCategoria());
+            statement.setBoolean(3, categoria.getActivo());
+            statement.setInt(4, categoria.getIdCategoria());
             statement.executeUpdate();
             
             statement.close();
@@ -180,11 +178,14 @@ private Conexion conexion;
     
     }
     
-     //-------------------------------Borrar
+    //-------------------------------BORRAR
     public void borrarCategoria(int id){
-    try {
+        try {
+            //activo le ponemos 0, no lo borramos, lo Desactivamos
+            String sql = "UPDATE categoria SET activo = 0 WHERE idCategoria = ?;"; 
             
-            String sql = "DELETE FROM categoria WHERE idCategoria =?;";
+            //si ponemos este lo borramos de la base de dados
+//          String sql = "DELETE FROM categoria WHERE idCategoria =?;";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, id);
@@ -196,7 +197,7 @@ private Conexion conexion;
             statement.close();
     
         } catch (SQLException ex) {
-            System.out.println("Error al insertar un alumno: " + ex.getMessage());
+            System.out.println("Error al insertar una Categoria: " + ex.getMessage());
         }
     }
     
@@ -234,7 +235,7 @@ private Conexion conexion;
                 categoria.setIdCategoria(resultSet.getInt("idCategoria"));
                 categoria.setNombre(resultSet.getString("nombre"));
                 categoria.setDescripcion(resultSet.getString("descripcion"));
-                
+                categoria.setActivo(resultSet.getBoolean("activo"));
                 categorias.add(categoria);
             }      
             statement.close();

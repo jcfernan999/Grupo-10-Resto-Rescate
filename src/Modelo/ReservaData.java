@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ReservaData {
@@ -58,7 +60,7 @@ public class ReservaData {
     
         try {
             
-            String sql = "UPDATE reserva SET idCliente = ?, idMesa = ? , fecha =?, hora = ?, activo = ? WHERE idProducto = ?;";
+            String sql = "UPDATE reserva SET idCliente = ?, idMesa = ? , fecha =?, hora = ?, activo = ? WHERE idReserva = ?;";
 
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, reserva.getCliente().getIdCliente());
@@ -92,45 +94,15 @@ public class ReservaData {
     }
     
     
-    public List<Reserva> obtenerReserva(String tipo,String dato){
+    public List<Reserva> obtenerReservaPorDNI(int dni){
         List<Reserva> reservas = new ArrayList<Reserva>();
         String sql;    
         PreparedStatement statement;
         try {
-            if("idCliente".equals(tipo))
-            {
-                sql = "SELECT * FROM reserva WHERE idCliente = ? AND activo = 1 ;";
-                statement = connection.prepareStatement(sql);
-                statement.setString(1,dato);
-            }
-            else if("Activos".equals(tipo))
-            {
-                sql = "SELECT * FROM reserva WHERE activo = 1 ;";
-                 statement = connection.prepareStatement(sql);
-              
-            }
-            else if("Desactivado".equals(tipo))
-            {
-                sql = "SELECT * FROM reserva WHERE activo = 0 ;";
-                 statement = connection.prepareStatement(sql);
-                
-            }
-            else if("Dia".equals(tipo)){
-                sql = "SELECT * FROM reserva WHERE activo = 1 and fecha = CURDATE();";
-                statement = connection.prepareStatement(sql);
-                
-            }
-            else if("Fecha".equals(tipo)){
-                
-                sql = "SELECT * FROM reserva WHERE activo = 1 AND fecha = ? ;";
-                 statement = connection.prepareStatement(sql);
-                 statement.setString(1,dato);
-            }
-            else{
-                sql = "SELECT * FROM reserva WHERE activo = 1;";
-                 statement = connection.prepareStatement(sql);
-            }
             
+            sql = "SELECT * FROM reserva r, cliente c WHERE r.idCliente = c.idCliente AND c.dni = ? AND r.activo = 1 ;";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,dni);
          
             ResultSet resultSet = statement.executeQuery();
             Reserva  reserva;
@@ -184,12 +156,110 @@ public class ReservaData {
             }      
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("errorororror: " + ex.getMessage());
+            System.out.println("Error al buscar una reserva: " + ex.getMessage());
         }
         
         return reserva;
     }
     
+    public List<Reserva> obtenerReservaPorMesa(int idMesa){
+        List<Reserva> reservas = new ArrayList<Reserva>();
+            
+        try {
+            String horaActual = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+            String sql = "SELECT * FROM reserva WHERE idMesa = ? AND activo = 1 AND fecha = CURDATE();";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,idMesa);
+//            statement.setString(2,horaActual);
+            ResultSet resultSet = statement.executeQuery();
+            Reserva  reserva;
+            while(resultSet.next()){
+               reserva = new Reserva();
+               reserva.setIdReserva(resultSet.getInt("idReserva"));
+
+               reserva.setFecha(resultSet.getDate("fecha"));
+               reserva.setHora(resultSet.getString("hora"));
+               reserva.setActivo(resultSet.getBoolean("activo"));
+
+               Cliente c=buscarCliente(resultSet.getInt("idCliente"));
+               reserva.setCliente(c);
+
+               Mesa m=buscarMesa(resultSet.getInt("idMesa"));
+               reserva.setMesa(m);
+
+               reservas.add(reserva);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener la Reserva: " + ex.getMessage());
+        }
+        return reservas;
+    }
+    public Reserva buscarReservaPorMesa(int id){
+        Reserva reserva=null;
+    try {
+            
+            String sql = "SELECT * FROM reserva WHERE idMesa = ? AND activo = 1 AND fecha = CURDATE();";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, id);
+           
+            ResultSet resultSet=statement.executeQuery();
+            
+            while(resultSet.next()){
+               reserva = new Reserva();
+               reserva.setIdReserva(resultSet.getInt("idReserva"));
+               
+               reserva.setFecha(resultSet.getDate("fecha"));
+               reserva.setHora(resultSet.getString("hora"));
+               reserva.setActivo(resultSet.getBoolean("activo"));
+               
+               Cliente c=buscarCliente(resultSet.getInt("idCliente"));
+               reserva.setCliente(c);
+               
+               Mesa m=buscarMesa(resultSet.getInt("idMesa"));
+               reserva.setMesa(m);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar una reserva: " + ex.getMessage());
+        }
+        
+        return reserva;
+    }
+    
+    public Reserva buscarReservaPorMesaEstado(int id){
+        Reserva reserva=null;
+    try {
+            
+            String sql = "SELECT * FROM reserva r,mesa m WHERE r.idMesa=m.idMesa and r.idMesa = ? and r.activo=1 and m.estado = 2;";
+
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, id);
+           
+            ResultSet resultSet=statement.executeQuery();
+            
+            while(resultSet.next()){
+               reserva = new Reserva();
+               reserva.setIdReserva(resultSet.getInt("idReserva"));
+               
+               reserva.setFecha(resultSet.getDate("fecha"));
+               reserva.setHora(resultSet.getString("hora"));
+               reserva.setActivo(resultSet.getBoolean("activo"));
+               
+               Cliente c=buscarCliente(resultSet.getInt("idCliente"));
+               reserva.setCliente(c);
+               
+               Mesa m=buscarMesa(resultSet.getInt("idMesa"));
+               reserva.setMesa(m);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al buscar una reserva: " + ex.getMessage());
+        }
+        
+        return reserva;
+    }
     public Cliente buscarCliente(int id){
     
         ClienteData ad=new ClienteData(conexion);

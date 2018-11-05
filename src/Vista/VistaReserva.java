@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -65,7 +66,7 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             tbIdCliente.setVisible(false);
             tbIdMesa.setVisible(false);
             cargaCapacidadMesas();
-            cargarTablaProducto("","");
+            
             
         } 
         catch (ClassNotFoundException ex) {
@@ -114,7 +115,7 @@ public class VistaReserva extends javax.swing.JInternalFrame {
         jPanel8 = new javax.swing.JPanel();
         tbBuscar = new javax.swing.JTextField();
         btnBuscar1 = new javax.swing.JButton();
-        cbBuscar = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tReserva = new javax.swing.JTable();
@@ -377,21 +378,17 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             }
         });
 
-        cbBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DNI", "Mesa", "Dia", "Fecha", "Activos", "Desactivado" }));
-        cbBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbBuscarActionPerformed(evt);
-            }
-        });
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("DNI");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cbBuscar, 0, 144, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(tbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -401,9 +398,9 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(cbBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                    .addComponent(tbBuscar))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(21, 21, 21))
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(btnBuscar1)
@@ -462,7 +459,7 @@ public class VistaReserva extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 463, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,13 +551,11 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             Cliente cliente = clienteData.buscarClientePorDni(Integer.parseInt(tbDni.getText()));
             
             //Buscamos la Mesa
-            
-
             Mesa mesa = mesaData.buscarMesa(btnMesaSeleccionada);
-
-            mesa.setEstado(2);
+            mesa.setEstado(2);//Cambiamos el estado a reservado("2")
             //Actualizamos la mesa
             mesaData.actualizarMesa(mesa);
+            
             Date date = dcFecha.getDate();
             long d = date.getTime();
             java.sql.Date fecha = new java.sql.Date(d);
@@ -575,7 +570,7 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             reservaData.guardarReserva(reserva);
             Limpiar();
             LimpiarTabla();
-            cargarTablaProducto("","");
+            cargarTablaReserva(btnMesaSeleccionada);
         }
 
     }//GEN-LAST:event_btnAgregar2ActionPerformed
@@ -615,11 +610,12 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             boolean activo = true;
             int id = Integer.parseInt(tbId.getText());
 
-            Reserva reserva=new Reserva(cliente,mesa,fecha,hora,activo);
+            Reserva reserva=new Reserva(id,cliente,mesa,fecha,hora,activo);
             reservaData.actualizarReserva(reserva);
             Limpiar();
             LimpiarTabla();
-            cargarTablaProducto("","");
+            cargarTablaReserva(btnMesaSeleccionada);
+            
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -646,9 +642,21 @@ public class VistaReserva extends javax.swing.JInternalFrame {
         else
         {
             int id=Integer.parseInt(tbId.getText());
-            
+//            Reserva reserva=reservaData.buscarReserva(id);
+//            int idmesa=reserva.getMesa().getIdMesa();
             
             reservaData.borrarReserva(id);
+//            
+//            //Buscamos la Mesa
+//            Mesa mesa = mesaData.buscarMesa(idmesa);
+//
+//            mesa.setEstado(1);
+//            //Actualizamos la mesa
+//            mesaData.actualizarMesa(mesa);
+            
+            Limpiar();
+            LimpiarTabla();
+            cargarTablaReserva(btnMesaSeleccionada);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -661,70 +669,40 @@ public class VistaReserva extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
-        String seleccionado = (String)cbBuscar.getSelectedItem();
-        //        cargarTablaProducto();
-       
-        
         if(tbBuscar.getText().isEmpty())
         {
-
-            JOptionPane.showMessageDialog(null, "Ingrese Datos ");
+            JOptionPane.showMessageDialog(null, "Ingrese DNI ");
         }
         else{
             LimpiarTabla();
-            cargarTablaProducto(seleccionado,tbBuscar.getText());
+            cargarTablaReservas(parseInt(tbBuscar.getText()));
         }
     }//GEN-LAST:event_btnBuscar1ActionPerformed
-
-    private void cbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbBuscarActionPerformed
-        if(cbBuscar.getSelectedItem()=="Activos")
-        {
-            tbBuscar.setEnabled(false);
-            LimpiarTabla();
-            cargarTablaProducto("Activos","");
-        }
-        else if(cbBuscar.getSelectedItem()=="Desactivado")
-        {
-            tbBuscar.setEnabled(false);
-            LimpiarTabla();
-            cargarTablaProducto("Desactivado","");
-        }
-        else if(cbBuscar.getSelectedItem()=="Fecha")
-        {
-            tbBuscar.setEnabled(true);
-            tbBuscar.setText("2018-10-29");
-            
-        }
-        else if(cbBuscar.getSelectedItem()=="Dia")
-        {
-            tbBuscar.setEnabled(false);
-            LimpiarTabla();
-            cargarTablaProducto("Dia","");
-        }
-        else
-        {
-            tbBuscar.setEnabled(true);
-        }
-    }//GEN-LAST:event_cbBuscarActionPerformed
 
     private void tReservaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tReservaMousePressed
         int filaSeleccionada = this.tReserva.getSelectedRow();//Identificamos que fila ha sido seleccionada
 
         try {
+            if(filaSeleccionada==-1)
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione una Fila");
+            }
+            else{
+                this.tbId.setText(tReserva.getValueAt(filaSeleccionada, 0).toString());
+                this.tbIdCliente.setText(tReserva.getValueAt(filaSeleccionada, 1).toString());
+                this.tbIdMesa.setText(tReserva.getValueAt(filaSeleccionada, 2).toString());
+                btnMesaSeleccionada=Integer.parseInt(tbIdMesa.getText());
+                int idC = Integer.parseInt(tReserva.getValueAt(filaSeleccionada, 1).toString());
+                
+                this.tbNombre.setText(tReserva.getValueAt(filaSeleccionada, 3).toString());
+                this.tbApellido.setText(tReserva.getValueAt(filaSeleccionada, 4).toString());
+                this.tbDni.setText(tReserva.getValueAt(filaSeleccionada, 5).toString());
+                this.tbNom.setText(tReserva.getValueAt(filaSeleccionada, 6).toString());
+                
+                dcFecha.setDate(reservaData.buscarReserva(Integer.parseInt(tbId.getText())).getFecha());
 
-            this.tbId.setText(tReserva.getValueAt(filaSeleccionada, 0).toString());
-            this.tbIdCliente.setText(tReserva.getValueAt(filaSeleccionada, 1).toString());
-            this.tbIdMesa.setText(tReserva.getValueAt(filaSeleccionada, 2).toString());
-            btnMesaSeleccionada=Integer.parseInt(tbIdMesa.getText());
-            int idC = Integer.parseInt(tReserva.getValueAt(filaSeleccionada, 1).toString());
-            this.tbDni.setText(clienteData.buscarCliente(idC).getDni()+"");
-            this.tbNombre.setText(tReserva.getValueAt(filaSeleccionada, 3).toString());
-            this.tbApellido.setText(tReserva.getValueAt(filaSeleccionada, 4).toString());
-            this.tbNom.setText(tReserva.getValueAt(filaSeleccionada, 5).toString());
-            dcFecha.setDate(reservaData.buscarReserva(Integer.parseInt(tbId.getText())).getFecha());
-            
-            this.ftbHora.setText(tReserva.getValueAt(filaSeleccionada, 7).toString());
-            
+                this.ftbHora.setText(tReserva.getValueAt(filaSeleccionada, 8).toString());
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: " + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
@@ -735,7 +713,7 @@ public class VistaReserva extends javax.swing.JInternalFrame {
     private void botonesMesas(int capacidad)
     {
 //        botonesMesa.clear();
-        MesaData mq = new MesaData(conexion);
+         MesaData mq = new MesaData(conexion);
         listaMesas =(ArrayList)mq.obtenerMesaDetalleBotones(capacidad);
         
         for(Mesa item:listaMesas)
@@ -762,6 +740,12 @@ public class VistaReserva extends javax.swing.JInternalFrame {
                 public void actionPerformed(ActionEvent e) {
                     btnMesaSeleccionada = Integer.parseInt(boton.getName());
                     tbNom.setText(boton.getText());
+                    Reserva reserva = reservaData.buscarReservaPorMesaEstado(btnMesaSeleccionada);
+                   
+                    if(reserva != null)
+                    {
+                        cargarTablaReserva(btnMesaSeleccionada);
+                    }
                    
                 }
             });
@@ -773,12 +757,20 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             if(item.getEstado()==1)
             {
                 boton.setBackground(Color.green);
-                 boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
+                boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
             }
             if(item.getEstado()==2)
-            {
-                boton.setBackground(Color.yellow);
-                 boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Reservado_A.png")));
+            {   
+                Reserva reserva = reservaData.buscarReservaPorMesa(item.getIdMesa());
+                if(reserva == null)
+                {
+                    boton.setBackground(Color.green);
+                    boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
+                }
+                else{
+                    boton.setBackground(Color.yellow);
+                    boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Reservado_A.png")));
+                }
             }
            boton.setHorizontalTextPosition(SwingConstants.CENTER);
             boton.setVerticalTextPosition(SwingConstants.TOP);
@@ -794,10 +786,10 @@ public class VistaReserva extends javax.swing.JInternalFrame {
         }
     }
     
-    public void cargarTablaProducto(String seleccionado, String buscar){
-        listaReservas =(ArrayList)reservaData.obtenerReserva(seleccionado,buscar);
-        String[] columnName = {"IdR","IdC","IdM", "Nombre","Apellido", "Mesa", "Fecha", "Hora"};
-        Object[][] rows = new Object[listaReservas.size()][8];
+    public void cargarTablaReservas(int dni){
+        listaReservas =(ArrayList)reservaData.obtenerReservaPorDNI(dni);
+        String[] columnName = {"IdR","IdC","IdM", "Nombre","Apellido","dni", "Mesa", "Fecha", "Hora"};
+        Object[][] rows = new Object[listaReservas.size()][9];
         for(int i = 0; i < listaReservas.size(); i++)
         {
             rows[i][0] = listaReservas.get(i).getIdReserva();
@@ -805,19 +797,41 @@ public class VistaReserva extends javax.swing.JInternalFrame {
             rows[i][2] = listaReservas.get(i).getMesa().getIdMesa();
             rows[i][3] = listaReservas.get(i).getCliente().getNombre();
             rows[i][4] = listaReservas.get(i).getCliente().getApellido();
-            rows[i][5] = listaReservas.get(i).getMesa().getNombre();
-            rows[i][6] = listaReservas.get(i).getFecha();
-            rows[i][7] = listaReservas.get(i).getHora();
+            rows[i][5]=listaReservas.get(i).getCliente().getDni();
+            rows[i][6] = listaReservas.get(i).getMesa().getNombre();
+            rows[i][7] = listaReservas.get(i).getFecha();
+            rows[i][8] = listaReservas.get(i).getHora();
         }
         
         TheModel model = new TheModel(rows, columnName);
         tReserva.setModel(model);
-        tReserva.setRowHeight(50);
-        tReserva.getColumnModel().getColumn(0).setPreferredWidth(20);
-        tReserva.getColumnModel().getColumn(1).setPreferredWidth(20);
-        tReserva.getColumnModel().getColumn(2).setPreferredWidth(20);
-        tReserva.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tReserva.getColumnModel().getColumn(4).setPreferredWidth(100);
+        tReserva.setRowHeight(27);
+        
+        
+        
+        
+        tReserva.getColumnModel().getColumn(0).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(0).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(1).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(1).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(1).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(2).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(2).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(2).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(3).setPreferredWidth(150);
+        
+        tReserva.getColumnModel().getColumn(4).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(4).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(4).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(5).setPreferredWidth(80);
+        tReserva.getColumnModel().getColumn(6).setPreferredWidth(60);
+        tReserva.getColumnModel().getColumn(7).setPreferredWidth(80);
+        tReserva.getColumnModel().getColumn(8).setPreferredWidth(50);
         
     }
     DefaultTableModel temp;
@@ -840,6 +854,58 @@ public class VistaReserva extends javax.swing.JInternalFrame {
         dcFecha.setDate(null);
         
     }
+    
+    public void cargarTablaReserva(int idMesa){
+        String str="";
+        listaReservas =(ArrayList)reservaData.obtenerReservaPorMesa(idMesa);
+         String[] columnName = {"IdR","IdC","IdM", "Nombre","Apellido","DNI", "Mesa", "Fecha", "Hora"};
+        Object[][] rows = new Object[listaReservas.size()][9];
+        for(int i = 0; i < listaReservas.size(); i++)
+        {
+            rows[i][0] = listaReservas.get(i).getIdReserva();
+            rows[i][1] = listaReservas.get(i).getCliente().getIdCliente();
+            rows[i][2] = listaReservas.get(i).getMesa().getIdMesa();
+            rows[i][3] = listaReservas.get(i).getCliente().getNombre();
+            rows[i][4] = listaReservas.get(i).getCliente().getApellido();
+            rows[i][5]=listaReservas.get(i).getCliente().getDni();
+            rows[i][6]=listaReservas.get(i).getMesa().getNombre();
+            
+            rows[i][7] = listaReservas.get(i).getFecha();
+            rows[i][8] = listaReservas.get(i).getHora();
+        }
+        
+        TheModel model = new TheModel(rows, columnName);
+        tReserva.setModel(model);
+        tReserva.setRowHeight(27);
+        
+        
+        
+        
+        tReserva.getColumnModel().getColumn(0).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(0).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(1).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(1).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(1).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(2).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(2).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(2).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(3).setPreferredWidth(150);
+        
+        tReserva.getColumnModel().getColumn(4).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(4).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(4).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(5).setPreferredWidth(80);
+        tReserva.getColumnModel().getColumn(6).setPreferredWidth(60);
+        tReserva.getColumnModel().getColumn(7).setPreferredWidth(80);
+        tReserva.getColumnModel().getColumn(8).setPreferredWidth(50);
+        
+        
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnAgregar2;
@@ -849,11 +915,11 @@ public class VistaReserva extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox<String> cbBuscar;
     private javax.swing.JComboBox<Integer> cbCapacidad;
     private com.toedter.calendar.JDateChooser dcFecha;
     private javax.swing.JFormattedTextField ftbHora;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

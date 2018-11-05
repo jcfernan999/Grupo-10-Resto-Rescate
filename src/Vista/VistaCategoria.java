@@ -7,8 +7,6 @@ import Modelo.SoloMayusculas;
 import Modelo.TheModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +34,7 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
         }
     }
     
-    
+     
     
    
     @SuppressWarnings("unchecked")
@@ -94,9 +92,8 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tbId, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(tbNombre)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
+                    .addComponent(tbNombre)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -104,7 +101,7 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tbNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,7 +294,7 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -305,7 +302,7 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
@@ -372,11 +369,11 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
         else
         {
             String nombre = tbNombre.getText();
-           
             String descripcion = tbaDescripcion.getText();
-       
-            Categoria categoria=new Categoria(nombre,descripcion);
+            boolean activo = true;
+            Categoria categoria=new Categoria(nombre,descripcion,activo);
             categoriaData.guardarCategoria(categoria);
+            JOptionPane.showMessageDialog(null, "Categoria Agregada");
             Limpiar();
             LimpiarTabla();
             cargarTablaCategoria("","");
@@ -393,8 +390,8 @@ public class VistaCategoria extends javax.swing.JInternalFrame {
             String nombre = tbNombre.getText();
             String descripcion = tbaDescripcion.getText();
             int id=Integer.parseInt(tbId.getText());
-
-            Categoria categoria=new Categoria(id,nombre,descripcion);
+            boolean activo = true;
+            Categoria categoria=new Categoria(id,nombre,descripcion,activo);
             categoriaData.actualizarCategoria(categoria);
             
             Limpiar();

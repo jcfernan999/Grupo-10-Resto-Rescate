@@ -161,7 +161,7 @@ public class ClienteData {
         statement.close();
     } 
     catch (SQLException ex){
-        System.out.println("errorororror: " + ex.getMessage());
+        System.out.println("Error al buscar un cliente: " + ex.getMessage());
     }
         
         return cliente;
@@ -205,7 +205,7 @@ public class ClienteData {
             statement.close();
     
         } catch (SQLException ex) {
-            System.out.println("Error al insertar un alumno: " + ex.getMessage());
+            System.out.println("Error al borrar un alumno: " + ex.getMessage());
         }
     }
     public Cliente buscarClientePorDni(int dni){

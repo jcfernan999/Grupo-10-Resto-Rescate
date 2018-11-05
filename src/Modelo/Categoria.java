@@ -1,32 +1,26 @@
-
 package Modelo;
 
-import java.time.LocalDate;
-
-/**
- *
- * @author kenchiro
- */
 public class Categoria 
 {
     private int idCategoria = -1;
     private String nombre;
     private String descripcion;
-    
+    private boolean activo;
 
-    public Categoria(int idCategoria, String nombre, String descripcion) 
+    public Categoria(int idCategoria, String nombre, String descripcion, boolean activo) 
     {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        
+        this.activo = activo;
     }
 
-    public Categoria(String nombre, String descripcion) 
+    public Categoria(String nombre, String descripcion, boolean activo) 
     {
         this.idCategoria = -1;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.activo = activo;
     }
     
     public Categoria()
@@ -61,6 +55,14 @@ public class Categoria
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
     
     

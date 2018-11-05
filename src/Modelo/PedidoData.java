@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PedidoData {
@@ -83,7 +85,7 @@ public class PedidoData {
             }      
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("errorororror: " + ex.getMessage());
+            System.out.println("Error al buscar un pedido: " + ex.getMessage());
         }
         
         return pedido;
@@ -119,7 +121,7 @@ public class PedidoData {
             }      
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("errorororror: " + ex.getMessage());
+            System.out.println("Error al buscar un pedido por mesa: " + ex.getMessage());
         }
         
         return pedido;
@@ -165,4 +167,60 @@ public class PedidoData {
         }
     
     }
+    
+    public List<Pedido> obtenerPedido(String tipo,String  dato, String dato2){
+        List<Pedido> pedidos = new ArrayList<Pedido>();
+        String sql;    
+        PreparedStatement statement;
+        try {
+            if("Cobrados".equals(tipo)){
+                sql = "SELECT * FROM pedido WHERE idMesero = ? and pagado = 1 and fecha = CURDATE();";
+                statement = connection.prepareStatement(sql);
+                
+                statement.setString(1,dato);
+            }
+            else if("Cancelados del Dia".equals(tipo))
+            {
+                sql = "SELECT * FROM pedido WHERE idMesero = ? and cancelados = 1 and fecha = CURDATE();";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+            }
+            else{
+                sql = "SELECT * FROM pedido WHERE idMesero = ? and pagado = 1 and fecha BETWEEN ? AND ?;";
+                statement = connection.prepareStatement(sql);
+                statement.setString(1,dato);
+                statement.setString(2,tipo);
+                statement.setString(3,dato2);
+            }
+            
+         
+            ResultSet resultSet = statement.executeQuery();
+            Pedido pedido;
+            while(resultSet.next()){
+               pedido = new Pedido();
+               pedido.setIdPedido(resultSet.getInt("idPedido"));
+               pedido.setFecha(resultSet.getDate("fecha"));
+               pedido.setHora(resultSet.getString("hora"));
+               pedido.setPagado(resultSet.getBoolean("Pagado"));
+               pedido.setCancelado(resultSet.getBoolean("Cancelado"));
+               
+               
+               Mesero meseros = buscarMesero(resultSet.getInt("idMesero"));
+               pedido.setMesero(meseros);
+               
+               Mesa mesas = buscarMesa(resultSet.getInt("idMesa"));
+               pedido.setMesa(mesas);
+                
+               pedidos.add(pedido);
+            }      
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener los Pedidos: " + ex.getMessage());
+        }
+        
+        
+        return pedidos;
+    }
+    
+    
 }

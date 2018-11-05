@@ -17,6 +17,8 @@ import Modelo.ProductoData;
 import Modelo.Conexion;
 import Modelo.Detalle;
 import Modelo.DetalleData;
+import Modelo.Reserva;
+import Modelo.ReservaData;
 
 import Modelo.TheModel;
 import static Vista.Principal.Escritorio;
@@ -30,9 +32,11 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -68,18 +72,16 @@ public class VistaPedido extends javax.swing.JInternalFrame {
     //Detalle
     private DetalleData detalleData;
     private ArrayList<Detalle> listaDetalles;
-    
+    //Cliente
     private ClienteData clienteData;
     private ArrayList<Cliente> listaClientes;
-     //Hacemos el relog
+    //Reserva
+    private ReservaData reservaData;
+    private ArrayList<Reserva> listaReservas;
     
     public VistaPedido() {
         initComponents();
-//        pnlReserva.setVisible(false);
-//        pnlCambio.setVisible(false);
-        jLabel5.setVisible(false);
-        tbDni.setVisible(false);
-        btnBuscar.setVisible(false);
+
         //----------------------------Mesa
         botonesMesa = new ArrayList<>();
         botonesCategoria = new ArrayList<>();
@@ -94,6 +96,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
             mesaData = new MesaData(conexion);
             pedidoData = new PedidoData(conexion);
             detalleData = new DetalleData(conexion);
+            reservaData = new ReservaData(conexion);
             cargaCapacidadMesas();
             botonesCategoria();
             cargarTablaMesero();
@@ -143,9 +146,9 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         btnNuevo = new javax.swing.JButton();
         btnVerMesa = new javax.swing.JButton();
         pnlReserva = new javax.swing.JPanel();
-        tbDni = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tReserva = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
         cbPagado = new javax.swing.JCheckBox();
         btnGuardar = new javax.swing.JButton();
@@ -269,7 +272,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 .addGroup(pnlDetalleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
@@ -292,9 +295,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,7 +311,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE))
         );
 
         jPanel9.setBackground(new java.awt.Color(153, 153, 255));
@@ -431,52 +432,58 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         pnlReserva.setBackground(new java.awt.Color(0, 153, 255));
         pnlReserva.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Reserva"));
 
-        tbDni.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        tbDni.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbDniActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("DNI");
-
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Mesa/VerReserva_A.png"))); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Mesa/Cancelar_A.png"))); // NOI18N
         btnBuscar.setBorder(null);
         btnBuscar.setContentAreaFilled(false);
         btnBuscar.setFocusPainted(false);
-        btnBuscar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Buscar46_2.png"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
             }
         });
 
+        tReserva.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tReserva.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tReservaMousePressed(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tReserva);
+
         javax.swing.GroupLayout pnlReservaLayout = new javax.swing.GroupLayout(pnlReserva);
         pnlReserva.setLayout(pnlReservaLayout);
         pnlReservaLayout.setHorizontalGroup(
             pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlReservaLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(tbDni)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnBuscar)
                 .addContainerGap())
+            .addGroup(pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlReservaLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(121, Short.MAX_VALUE)))
         );
         pnlReservaLayout.setVerticalGroup(
-            pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlReservaLayout.createSequentialGroup()
-                .addGroup(pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlReservaLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel5))
-                    .addGroup(pnlReservaLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(tbDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(61, 61, 61))
-            .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.TRAILING)
+            pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlReservaLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(btnBuscar)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(pnlReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlReservaLayout.createSequentialGroup()
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         jPanel11.setBackground(new java.awt.Color(0, 153, 255));
@@ -654,14 +661,16 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlCambio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlReserva, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlCambio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(pnlReserva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnlDetalle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -676,18 +685,20 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pnlCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlReserva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -750,7 +761,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         
         if(DetalleSeleccionada==-1)
         {
-            JOptionPane.showMessageDialog(null, "Seleccione una Fila", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Seleccione una Fila");
         }
         else
         {
@@ -818,28 +829,20 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnVerMesaActionPerformed
 
-    private void tbDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbDniActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbDniActionPerformed
-
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-//        if(tbDni.getText()=="")
-//        {
-//            JOptionPane.showMessageDialog(null, "Ingrese el DNI", "Error", JOptionPane.WARNING_MESSAGE);
-//        }
-//        else
-//        {
-//            int dni=Integer.parseInt(tbDni.getText());
-//            Cliente cliente=clienteData.buscarCliente(dni);
-//            Reserva reseva
-//            if(cliente!=null){
-//               JOptionPane.showMessageDialog(null, cliente.getNombre());
-//            }
-//            else
-//            {
-//                JOptionPane.showMessageDialog(null, "No hay reserva DNI: "+cliente.getDni());
-//            }
-//        }
+        int ReservaSeleccionada = this.tReserva.getSelectedRow();
+        if(ReservaSeleccionada == -1)
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione una Reserva");
+        }
+        else
+        {
+            int idReerva =Integer.parseInt(tReserva.getValueAt(ReservaSeleccionada, 0).toString());
+            Reserva reserva = reservaData.buscarReserva(idReerva);
+            reserva.setActivo(false);
+            reservaData.actualizarReserva(reserva);
+            RecargarPedido();
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -929,31 +932,45 @@ public class VistaPedido extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        Mesa mesa = mesaData.buscarMesa(btnMesaSeleccionada);
-        Pedido pedido = pedidoData.buscarPedido(btnMesaSeleccionada);
-        if(btnMesaSeleccionada!=0)
-         {
-            pedido.setCancelado(true);
-            pedidoData.actualizarPedido(pedido);
-
-            mesa.setEstado(1);
-            mesaData.actualizarMesa(mesa);
-            
-            for (int i = 0; i < tDetalle.getRowCount(); i++) {
-                
-                Producto producto = productoData.buscarProducto(parseInt(tDetalle.getValueAt(i, 0).toString()));
-                int cant= parseInt(tDetalle.getValueAt(i, 3).toString());
-                producto.setCantidad(cant);
-                productoData.actualizarProducto(producto);
-                
+        Mesa m = mesaData.buscarMesa(btnMesaSeleccionada);
+        try {
+            if(m==null)
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione una mesa ", "Error", JOptionPane.WARNING_MESSAGE);
             }
-            
-            RecargarPedido();
-         }
-         else
-         {
-             JOptionPane.showMessageDialog(null, "Seleccione una mesa ", "Error", JOptionPane.WARNING_MESSAGE);
-         }
+            else if(tDetalle.getRowCount()==0)
+            {
+                JOptionPane.showMessageDialog(null, "Seleccione Ver Mesa", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+            else
+            {
+               
+               
+                for (int i = 0; i < tDetalle.getRowCount(); i++) {
+                    Detalle detalle = detalleData.buscarDetalle(parseInt(tDetalle.getValueAt(i, 4).toString()));
+                    Producto producto = productoData.buscarProducto(detalle.getProducto().getIdProducto());
+                    
+                    int cant = parseInt(tDetalle.getValueAt(i, 0).toString());
+                    producto.setCantidad(cant+producto.getCantidad());
+                    productoData.actualizarProducto(producto);
+                    
+                }
+                Pedido pedido = pedidoData.buscarPedido(btnMesaSeleccionada);
+                
+                pedido.setCancelado(true);
+                pedidoData.actualizarPedido(pedido);
+                
+                m.setEstado(1);
+                
+                mesaData.actualizarMesa(m);
+                
+                RecargarPedido();
+
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al leer datos de la tabla: " + e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
     
     private void btnCambiar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiar1ActionPerformed
@@ -981,6 +998,9 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 pedidoData.actualizarPedido(pedido);
                 mesa.setEstado(0);
                 mesaData.actualizarMesa(mesa);
+                JOptionPane.showMessageDialog(null, "Cambio de Mesa");
+                RecargarPedido();
+                
             }
             
         }
@@ -1038,6 +1058,10 @@ public class VistaPedido extends javax.swing.JInternalFrame {
              tbNueva.setText(tbNom.getText());
         }
     }//GEN-LAST:event_btnNuevaActionPerformed
+
+    private void tReservaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tReservaMousePressed
+        
+    }//GEN-LAST:event_tReservaMousePressed
 
     private void botonesCategoria()
     {
@@ -1137,6 +1161,12 @@ public class VistaPedido extends javax.swing.JInternalFrame {
                 public void actionPerformed(ActionEvent e) {
                     btnMesaSeleccionada = Integer.parseInt(boton.getName());
                     tbNom.setText(boton.getText());
+                    Reserva reserva = reservaData.buscarReservaPorMesaEstado(btnMesaSeleccionada);
+                   
+                    if(reserva != null)
+                    {
+                        cargarTablaReserva(btnMesaSeleccionada);
+                    }
                    
                 }
             });
@@ -1148,12 +1178,20 @@ public class VistaPedido extends javax.swing.JInternalFrame {
             if(item.getEstado()==1)
             {
                 boton.setBackground(Color.green);
-                 boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
+                boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
             }
             if(item.getEstado()==2)
-            {
-                boton.setBackground(Color.yellow);
-                 boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Reservado_A.png")));
+            {   
+                Reserva reserva = reservaData.buscarReservaPorMesa(item.getIdMesa());
+                if(reserva == null)
+                {
+                    boton.setBackground(Color.green);
+                    boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Libre_A.png")));
+                }
+                else{
+                    boton.setBackground(Color.yellow);
+                    boton.setIcon(new ImageIcon(getClass().getResource("/imagenes/Mesa/Reservado_A.png")));
+                }
             }
            boton.setHorizontalTextPosition(SwingConstants.CENTER);
             boton.setVerticalTextPosition(SwingConstants.TOP);
@@ -1238,7 +1276,71 @@ public class VistaPedido extends javax.swing.JInternalFrame {
         Escritorio.add(vr);
         Escritorio.moveToFront(vr);
     }
+    public void cargarTablaReserva(int idMesa){
+        listaReservas =(ArrayList)reservaData.obtenerReservaPorMesa(idMesa);
+        String[] columnName = {"IdR","IdC","IdM","nombre","Cliente","Mesa","Fecha","Hora"};
+        Object[][] rows = new Object[listaReservas.size()][8];
+        for(int i = 0; i < listaReservas.size(); i++)
+        {
+            rows[i][0] = listaReservas.get(i).getIdReserva();
+            rows[i][1] = listaReservas.get(i).getCliente().getIdCliente();
+            rows[i][2] = listaReservas.get(i).getMesa().getIdMesa();
+            rows[i][3] = listaReservas.get(i).getCliente().getNombre()+" "+listaReservas.get(i).getCliente().getApellido();
+            
+            
+            StringTokenizer tokens = new StringTokenizer(listaReservas.get(i).getMesa().getNombre());
+            while(tokens.hasMoreTokens()){
+                rows[i][5] = tokens.nextToken();
+            }
+            
+            
+            rows[i][6] = listaReservas.get(i).getFecha();
+            rows[i][7] = listaReservas.get(i).getHora();
+        }
+        
+        TheModel model = new TheModel(rows, columnName);
+        tReserva.setModel(model);
+        tReserva.setRowHeight(27);
+        
+        
+        
+        
+        tReserva.getColumnModel().getColumn(0).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(0).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(1).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(1).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(1).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(2).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(2).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(2).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(3).setPreferredWidth(200);
+        
+        tReserva.getColumnModel().getColumn(4).setMaxWidth(0);
+        tReserva.getColumnModel().getColumn(4).setMinWidth(0);
+        tReserva.getColumnModel().getColumn(4).setPreferredWidth(0);
+        
+        tReserva.getColumnModel().getColumn(6).setPreferredWidth(100);
+        tReserva.getColumnModel().getColumn(7).setPreferredWidth(50);
+        
+        
+    }
     
+    DefaultTableModel temp;
+    void LimpiarTabla(){
+        try{
+            temp = (DefaultTableModel) tReserva.getModel();
+            int a =temp.getRowCount()-1;
+            for(int i=0; i<a; i++)
+                temp.removeRow(0); 
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActual;
     private javax.swing.JButton btnAgregar;
@@ -1258,7 +1360,6 @@ public class VistaPedido extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -1273,6 +1374,7 @@ public class VistaPedido extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPanel pnlBotonesCategoria;
     private javax.swing.JPanel pnlBotonesProducto;
     private javax.swing.JPanel pnlCambio;
@@ -1283,8 +1385,8 @@ public class VistaPedido extends javax.swing.JInternalFrame {
     private javax.swing.JSpinner sCantidad;
     private javax.swing.JTable tDetalle;
     private javax.swing.JTable tMesero;
+    private javax.swing.JTable tReserva;
     private javax.swing.JTextField tbActual;
-    private javax.swing.JTextField tbDni;
     private javax.swing.JTextField tbHora;
     private javax.swing.JTextField tbNom;
     private javax.swing.JTextField tbNueva;

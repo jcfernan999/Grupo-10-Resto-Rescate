@@ -180,7 +180,7 @@ public class DetalleData {
         statement.close();
     } 
     catch (SQLException ex){
-        System.out.println("errorororror: " + ex.getMessage());
+        System.out.println("Error: al buscar un detalle " + ex.getMessage());
     }
         
         return detalle;

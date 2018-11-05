@@ -17,6 +17,7 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
 //        Escritorio.setBorder(new ImagenFondo());
         this.setExtendedState(MAXIMIZED_BOTH);
+        jMenuBar1.setVisible(false);
     }
 
   
@@ -40,15 +41,16 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         miMesas = new javax.swing.JMenuItem();
         miLista = new javax.swing.JMenuItem();
-        miEjemplo = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         miProducto = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         miPedido = new javax.swing.JMenuItem();
+        miListaPedido = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         miReserva = new javax.swing.JMenuItem();
 
         setAutoRequestFocus(false);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, java.awt.Color.black, java.awt.Color.black));
@@ -249,14 +251,6 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(miLista);
 
-        miEjemplo.setText("ejemplo");
-        miEjemplo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miEjemploActionPerformed(evt);
-            }
-        });
-        jMenu2.add(miEjemplo);
-
         jMenuBar1.add(jMenu2);
 
         jMenu1.setText("Producto");
@@ -280,6 +274,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu3.add(miPedido);
+
+        miListaPedido.setText("Mesero lista Pedido");
+        miListaPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miListaPedidoActionPerformed(evt);
+            }
+        });
+        jMenu3.add(miListaPedido);
 
         jMenuBar1.add(jMenu3);
 
@@ -374,12 +376,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReservaActionPerformed
 
     private void miReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miReservaActionPerformed
-        //        Escritorio.removeAll();
-        //        Escritorio.repaint();
-        //          VistaReserva vr=new VistaReserva();
-        //          vr.setVisible(true);
-        //        Escritorio.add(vr);
-        //        Escritorio.moveToFront(vr);
+        Escritorio.removeAll();
+        Escritorio.repaint();
+        VistaCategoria vc=new VistaCategoria();
+        vc.setVisible(true);
+        Escritorio.add(vc);
+        Escritorio.moveToFront(vc);
 
     }//GEN-LAST:event_miReservaActionPerformed
 
@@ -401,10 +403,6 @@ public class Principal extends javax.swing.JFrame {
         Escritorio.moveToFront(vp);
     }//GEN-LAST:event_miProductoActionPerformed
 
-    private void miEjemploActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEjemploActionPerformed
-
-    }//GEN-LAST:event_miEjemploActionPerformed
-
     private void miListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miListaActionPerformed
 
     }//GEN-LAST:event_miListaActionPerformed
@@ -416,6 +414,15 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void miListaPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miListaPedidoActionPerformed
+        Escritorio.removeAll();
+        Escritorio.repaint();
+        VistaMeseroReporte vpr=new VistaMeseroReporte();
+        vpr.setVisible(true);
+        Escritorio.add(vpr);
+        Escritorio.moveToFront(vpr);
+    }//GEN-LAST:event_miListaPedidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -472,8 +479,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JMenu mArchivo;
-    private javax.swing.JMenuItem miEjemplo;
     private javax.swing.JMenuItem miLista;
+    private javax.swing.JMenuItem miListaPedido;
     private javax.swing.JMenuItem miMesas;
     private javax.swing.JMenuItem miPedido;
     private javax.swing.JMenuItem miProducto;

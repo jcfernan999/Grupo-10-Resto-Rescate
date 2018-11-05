@@ -203,7 +203,7 @@ public class ProductoData {
             }      
             statement.close();
         } catch (SQLException ex) {
-            System.out.println("errorororror: " + ex.getMessage());
+            System.out.println("Error al buscar un producto: " + ex.getMessage());
         }
         
         return producto;
@@ -236,7 +236,7 @@ public class ProductoData {
             
 
         try {
-            String sql = "Select * From producto where idCategoria = ?;"; 
+            String sql = "Select * From producto where idCategoria = ? and activo=1 ;"; 
                     
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, idCategoria);
